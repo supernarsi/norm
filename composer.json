@@ -1,7 +1,9 @@
 {
     "name": "nineton-nasa/norm",
     "description": "A Basic ORM and DB library",
+    "version": "1.0.0",
     "type": "library",
+    "homepage": "https://github.com/supernarsi/norm",
     "license": "MIT",
     "authors": [
         {
