@@ -1,6 +1,6 @@
 {
     "name": "nineton-nasa/norm",
-    "description": "Basic ORM and DB for xjl",
+    "description": "A Basic ORM and DB library",
     "type": "library",
     "license": "MIT",
     "authors": [

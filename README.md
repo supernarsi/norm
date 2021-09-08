@@ -1,2 +1,2 @@
 # norm
-A basic ORM and DB libaray
+A basic ORM and DB library
