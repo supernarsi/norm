@@ -1,0 +1,30 @@
+{
+    "name": "nasa/norm",
+    "description": "Basic ORM and DB for xjl",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "narsi",
+            "email": "narsihuang@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Norm\\DB\\": "src/DB/",
+            "Norm\\ORM\\": "src/ORM/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\": "tests/"
+        }
+    }
+}
