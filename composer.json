@@ -1,5 +1,5 @@
 {
-    "name": "nasa/norm",
+    "name": "nineton-nasa/norm",
     "description": "Basic ORM and DB for xjl",
     "type": "library",
     "license": "MIT",
