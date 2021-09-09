@@ -7,12 +7,14 @@ use PDO;
 
 abstract class BaseOrmCreator
 {
+    protected string $modelNamespace = '';
     protected string $basePath = __DIR__ . '/../../';
     protected string $namespace;
     protected string $className;
     protected string $tableName;
     protected string $filePath = '';
     protected string $dirPath = '';
+    protected string $subDir;
 
     /**
      * @var DbProperty[]
@@ -23,21 +25,39 @@ abstract class BaseOrmCreator
 
     abstract protected function writeBaseContent(string $className, string $baseModelName);
 
+    protected function dir2Namespace(string $dir)
+    {
+        return str_replace('/', '\\', trim($dir, '/'));
+    }
+
+    protected function namespace2Dir(string $namespace)
+    {
+        return str_replace('\\', '/', trim($namespace, '\\'));
+    }
+
+    protected function buildNamespaceStr(string $baseDir, string $subDir): string
+    {
+        return $this->dir2Namespace($baseDir) . '\\' . $this->modelNamespace . '\\' . $this->dir2Namespace($subDir);
+    }
+
     /**
      * @param string $className
      * @param string $tableName
-     * @param string $newFileDirPath
+     * @param string $baseDir
+     * @param string $subDir
      * @throws Exception
      */
-    public function __construct(string $className, string $tableName, string $newFileDirPath = 'app/orm/')
+    public function __construct(string $className, string $tableName, string $baseDir = 'app/orm/', string $subDir = '')
     {
         if (!$className || !$tableName) {
             throw new Exception('param lost');
         }
         $this->className = $className;
         $this->tableName = $tableName;
-        $this->dirPath = $newFileDirPath;
-        $this->namespace = str_replace('/', '\\', $newFileDirPath);
+        $this->dirPath = $baseDir;
+        $this->subDir = $subDir;
+        $this->namespace = trim($this->buildNamespaceStr($baseDir, $subDir), '\\');
+        $this->dirPath = $this->namespace2Dir($this->namespace);
         $this->filePath = $this->fileExist();
         $this->parseDBTable($tableName);
     }

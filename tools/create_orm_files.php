@@ -10,5 +10,5 @@ $tableName = $argv[2] ?? '';
 $dirName = $argv[3] ?? '';
 $subDir = $argv[4] ?? '';
 
-$creator = new creator\OrmModelCreator($className, $tableName, $dirName);
+$creator = new creator\OrmModelCreator($className, $tableName, $dirName, $subDir);
 $creator->createField();

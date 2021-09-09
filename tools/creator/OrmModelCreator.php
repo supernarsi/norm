@@ -6,6 +6,8 @@ use Exception;
 
 class OrmModelCreator extends BaseOrmCreator
 {
+    protected string $modelNamespace = 'Model';
+
     /**
      * 构造 Model 的单个属性的文件内容
      *
@@ -145,8 +147,7 @@ renderdata;
     protected function fileExist(): string
     {
         $className = $this->className;
-        $dirPath = $this->basePath . $this->dirPath . '/';
-        $filePath = $dirPath . $className . '.php';
+        $filePath = $this->dirPath . '/' . $className . '.php';
         if (file_exists($filePath)) {
             throw new Exception('file exists: ' . $filePath);
         }
@@ -167,7 +168,7 @@ renderdata;
      */
     public function writeBaseContent(string $className, string $baseModelName): string
     {
-        $namespace = trim($this->namespace, '/');
+        $namespace = trim($this->namespace, '/') . '\'' . $this->modelNamespace . '\\' . $this->subDir;
         $baseContent = $this->getFile('base_content');
         $baseContent = str_replace('{{namespace}}', $namespace, $baseContent);
         $baseContent = str_replace('{{className}}', $className, $baseContent);
