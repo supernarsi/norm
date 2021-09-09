@@ -8,7 +8,7 @@ use Norm\ORM\Model\Model;
 class UserMapper extends BaseMapper
 {
     protected static string $tableName = 'user';
-    protected static string $className = User::class;
+    protected string $modelName = User::class;
 
     public function getTableName(): string
     {
