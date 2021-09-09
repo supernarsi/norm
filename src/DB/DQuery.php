@@ -34,31 +34,11 @@ class DQuery
     }
 
     /**
-     * @param DWhere[] $where
-     * @return DQuery
-     */
-    public function setWhere(array $where): DQuery
-    {
-        $this->where = $where;
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getOrders(): array
     {
         return $this->orders;
-    }
-
-    /**
-     * @param array $orders
-     * @return DQuery
-     */
-    public function setOrders(array $orders): DQuery
-    {
-        $this->orders = $orders;
-        return $this;
     }
 
     /**
@@ -182,8 +162,6 @@ class DQuery
      */
     public function page(int $page, int $limit): DQuery
     {
-        $this->page = $page;
-        $this->limit = $limit;
-        return $this;
+        return $this->setPage($page)->setLimit($limit);
     }
 }

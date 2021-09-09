@@ -67,17 +67,6 @@ abstract class Model
     }
 
     /**
-     * @param string $field
-     * @param mixed $val
-     * @return $this
-     */
-    public function setProperty(string $field, $val): self
-    {
-        isset($this->beSetProperties[$field]) && ($this->beSetProperties[$field] = true) && ($this->$field = $val);
-        return $this;
-    }
-
-    /**
      * Model constructor.
      *
      * @param array $data
@@ -97,6 +86,17 @@ abstract class Model
                 $isSet = false;
             }
         }
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $val
+     * @return $this
+     */
+    public function setProperty(string $field, $val): self
+    {
+        isset($this->beSetProperties[$field]) && ($this->beSetProperties[$field] = true) && ($this->$field = $val);
+        return $this;
     }
 
     /**

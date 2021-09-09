@@ -8,34 +8,32 @@ use Norm\ORM\Model\Model;
 
 abstract class BaseMapper implements Mapper
 {
-    protected static string $modelName;
+    /** @var string $modelName must extend the Norm\ORM\Model */
+    protected string $modelName;
 
     abstract public function getTableName(): string;
 
-    /**
-     * @param IStorage|null $db
-     */
+    protected function newModel(array $modelData, bool $unsetProperty): Model
+    {
+        return new $this->modelName($modelData, $this, $unsetProperty);
+    }
+
     protected function resetDb(?IStorage $db)
     {
         $db && $db->init($this->getTableName());
     }
 
-    /**
-     * @param IStorage $db
-     * @param array $data
-     * @return bool
-     */
+    public function createModel(): Model
+    {
+        return $this->newModel([], false);
+    }
+
     public function update(IStorage $db, array $data): bool
     {
         $this->resetDb($db);
         return $db->updateData($data);
     }
 
-    /**
-     * @param IStorage $db
-     * @param array $data
-     * @return int
-     */
     public function insert(IStorage $db, array $data): int
     {
         $this->resetDb($db);
@@ -60,72 +58,46 @@ abstract class BaseMapper implements Mapper
         return $db->setCondition($query)->sum($field);
     }
 
-    /**
-     * @param IStorage $db
-     * @param DQuery $query
-     * @return array
-     */
     public function findWhere(IStorage $db, DQuery $query): array
     {
         $this->resetDb($db);
         return $db->setCondition($query)->findData();
     }
 
-    /**
-     * @param IStorage $db
-     * @param DQuery $query
-     * @return array
-     */
     public function select(IStorage $db, DQuery $query): array
     {
         $this->resetDb($db);
         return $db->setCondition($query)->selectData();
     }
 
-    /**
-     * @param IStorage $db
-     * @param int $id
-     * @return array
-     */
     public function find(IStorage $db, int $id): array
     {
         $query = (new DQuery())->where('id', '=', $id);
         return $this->findWhere($db, $query);
     }
 
-    /**
-     * @param IStorage $db
-     * @param int $id
-     * @return Model|null
-     */
     public function findObj(IStorage $db, int $id): ?Model
     {
         $data = $this->find($db, $id);
-        return $data ? new static::$modelName($data, $this) : null;
+        return $data ? $this->newModel($data, true) : null;
     }
 
-
-    /**
-     * @param IStorage $db
-     * @param DQuery $query
-     * @return Model|null
-     */
     public function findObjWhere(IStorage $db, DQuery $query): ?Model
     {
         $data = $this->findWhere($db, $query);
-        return $data ? new static::$modelName($data, $this) : null;
+        return $data ? $this->newModel($data, true) : null;
     }
 
     /**
      * @param IStorage $db
      * @param DQuery $query
      * @param string $field
-     * @return array
+     * @return Model[]
      */
     public function selectObjs(IStorage $db, DQuery $query, string $field = ''): array
     {
         foreach ($this->select($db, $query) as $item) {
-            $nowObj = new static::$modelName($item, $this);
+            $nowObj = $this->newModel($item, true);
             if ($field && isset($item[$field])) {
                 $objs[$item[$field]] = $nowObj;
             } else {
@@ -153,35 +125,18 @@ abstract class BaseMapper implements Mapper
         return $db->insertAllData($insertData);
     }
 
-    /**
-     * @return Model
-     */
-    abstract public function createModel(): Model;
-
-    /**
-     * @param IStorage $db
-     * @return bool
-     */
     public function startTrans(IStorage $db): bool
     {
         $this->resetDb($db);
         return $db->startTrans();
     }
 
-    /**
-     * @param IStorage $db
-     * @return bool
-     */
     public function commit(IStorage $db): bool
     {
         $this->resetDb($db);
         return $db->commit();
     }
 
-    /**
-     * @param IStorage $db
-     * @return bool
-     */
     public function rollback(IStorage $db): bool
     {
         $this->resetDb($db);

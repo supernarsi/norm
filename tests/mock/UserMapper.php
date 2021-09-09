@@ -8,21 +8,11 @@ use Norm\ORM\Model\Model;
 class UserMapper extends BaseMapper
 {
     protected static string $tableName = 'user';
-    protected static string $modelName = User::class;
+    protected string $modelName = User::class;
 
     public function getTableName(): string
     {
         return self::$tableName;
-    }
-
-    public function createModel(): User
-    {
-        return $this->newModel([], false);
-    }
-
-    public function newModel(array $modelData, bool $unsetProperty): User
-    {
-        return new User($modelData, $this, $unsetProperty);
     }
 
     public function prepareSaveData(Model $model): array
