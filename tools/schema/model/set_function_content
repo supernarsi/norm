@@ -1,0 +1,4 @@
+    public function {{functionName}}({{type}} ${{property}}): {{className}}
+    {
+        return $this->setProperty('{{property}}', ${{property}});
+    }
