@@ -8,11 +8,8 @@ use Norm\ORM\Model\Model;
 
 abstract class BaseMapper implements Mapper
 {
-    protected static string $className;
+    protected static string $modelName;
 
-    /**
-     * @return string
-     */
     abstract public function getTableName(): string;
 
     /**
@@ -104,7 +101,7 @@ abstract class BaseMapper implements Mapper
     public function findObj(IStorage $db, int $id): ?Model
     {
         $data = $this->find($db, $id);
-        return $data ? new static::$className($data, $this) : null;
+        return $data ? new static::$modelName($data, $this) : null;
     }
 
 
@@ -116,7 +113,7 @@ abstract class BaseMapper implements Mapper
     public function findObjWhere(IStorage $db, DQuery $query): ?Model
     {
         $data = $this->findWhere($db, $query);
-        return $data ? new static::$className($data, $this) : null;
+        return $data ? new static::$modelName($data, $this) : null;
     }
 
     /**
@@ -128,7 +125,7 @@ abstract class BaseMapper implements Mapper
     public function selectObjs(IStorage $db, DQuery $query, string $field = ''): array
     {
         foreach ($this->select($db, $query) as $item) {
-            $nowObj = new static::$className($item, $this);
+            $nowObj = new static::$modelName($item, $this);
             if ($field && isset($item[$field])) {
                 $objs[$item[$field]] = $nowObj;
             } else {
@@ -159,23 +156,32 @@ abstract class BaseMapper implements Mapper
     /**
      * @return Model
      */
-    public function createModel(): Model
-    {
-        return new static::$className([], $this, false);
-    }
+    abstract public function createModel(): Model;
 
+    /**
+     * @param IStorage $db
+     * @return bool
+     */
     public function startTrans(IStorage $db): bool
     {
         $this->resetDb($db);
         return $db->startTrans();
     }
 
+    /**
+     * @param IStorage $db
+     * @return bool
+     */
     public function commit(IStorage $db): bool
     {
         $this->resetDb($db);
         return $db->commit();
     }
 
+    /**
+     * @param IStorage $db
+     * @return bool
+     */
     public function rollback(IStorage $db): bool
     {
         $this->resetDb($db);

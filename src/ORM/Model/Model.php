@@ -59,15 +59,11 @@ abstract class Model
 
     /**
      * @param array $initData
-     * @return $this
+     * @return $this|null
      */
-    protected function appBaseORMInit(array $initData = []): ?self
+    protected function initORM(array $initData = []): ?self
     {
-        if ($this->mapper) {
-            return $this->mapper->initModel($this, $initData);
-        } else {
-            return null;
-        }
+        return $this->mapper ? $this->mapper->initModel($this, $initData) : null;
     }
 
     /**
@@ -86,16 +82,16 @@ abstract class Model
      *
      * @param array $data
      * @param Mapper|null $mapper
-     * @param bool $unSetProperty 是否需要将所有字段标为未 set
+     * @param bool $unsetProperty 是否需要将所有字段标为未 set
      */
-    public function __construct(array $data = [], ?Mapper $mapper = null, bool $unSetProperty = true)
+    public function __construct(array $data = [], ?Mapper $mapper = null, bool $unsetProperty = true)
     {
         // 将类的属性赋值给 properties
         $this->beSetProperties = get_object_vars($this);
         $this->mapper = $mapper;
-        $this->appBaseORMInit($data);
+        $this->initORM($data);
 
-        if ($unSetProperty) {
+        if ($unsetProperty) {
             foreach ($this->beSetProperties as &$isSet) {
                 // 初始时，所有字段设为未 set
                 $isSet = false;
@@ -127,7 +123,7 @@ abstract class Model
         }
         $data = $this->getModelFields();
         $data['id'] = $id;
-        return $this->appBaseORMInit($data);
+        return $this->initORM($data);
     }
 
     public function update(IStorage $db): ?self
