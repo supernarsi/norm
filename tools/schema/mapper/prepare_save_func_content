@@ -1,0 +1,10 @@
+    /**
+     * @param Model|{{modelClassName}} $model
+     * @return array
+     */
+    public function prepareSaveData(Model $model): array
+    {
+        $dbFields = ['id' => $model->getId()];
+{{content}}
+        return $dbFields;
+    }
