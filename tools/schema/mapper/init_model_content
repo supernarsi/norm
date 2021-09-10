@@ -1,0 +1,11 @@
+    /**
+     * @param Model|{{modelClassName}} $model
+     * @param array $data
+     * @return {{modelClassName}}
+     */
+    public function initModel(Model $model, array $data = []): {{modelClassName}}
+    {
+{{initContent}}
+        return $model;
+    }
+

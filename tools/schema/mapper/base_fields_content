@@ -1,0 +1,8 @@
+    protected static string $tableName = '{{tableName}}';
+    protected string $modelName = {{modelClassName}}::class;
+
+    public function getTableName(): string
+    {
+        return self::$tableName;
+    }
+

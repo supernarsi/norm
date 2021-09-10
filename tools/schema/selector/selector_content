@@ -1,0 +1,24 @@
+<?php declare(strict_types=1);
+
+namespace {{namespace}};
+
+use {{modelNamespace}};
+use {{mapperNamespace}};
+use Norm\ORM\Model\Model;
+use Norm\ORM\Selector\Selector;
+
+class {{selectorClass}} extends Selector
+{
+    protected function setModelMapper(): {{mapperClass}}
+    {
+        return new {{mapperClass}}();
+    }
+
+    /**
+     * @return {{modelClass}}|Model
+     */
+    public function createModel(): {{modelClass}}
+    {
+        return parent::createModel();
+    }
+}
