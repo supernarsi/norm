@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tools\creator;
+namespace NormTools\Creator;
 
 use Exception;
 use PDO;
@@ -39,6 +39,7 @@ abstract class BaseOrmCreator
         if (!$className || !$tableName) {
             throw new Exception('param lost');
         }
+        $this->parseDBTable($tableName);
         $this->modelClassName = $className;
         $this->mapperClassName = $className . 'Mapper';
         $this->tableName = $tableName;
@@ -49,7 +50,6 @@ abstract class BaseOrmCreator
         if (!$this->checkDir($this->dirPath)) {
             throw new Exception('mkdir failed');
         }
-        $this->parseDBTable($tableName);
     }
 
     protected function getFullFilePath(string $className): string
@@ -162,14 +162,38 @@ abstract class BaseOrmCreator
     }
 
     /**
+     * 获取配置文件地址
+     *
+     * @param string $suffix
+     * @return string
+     */
+    protected function getDbEnvFileStr(string $suffix): string
+    {
+        $dir = $this->basePath;
+        if (!file_exists($dir . $suffix)) {
+            $dir = $dir . '../../';
+        }
+        if (!file_exists($dir . $suffix)) {
+            $dir = '';
+        }
+        return $dir ? $dir . $suffix : '';
+    }
+
+    /**
      * 从配置文件中解析出 db 配置
      *
      * @param string $tableName
      * @return DbProperty[]
+     * @throws Exception
      */
     protected function parseDBTable(string $tableName): array
     {
-        $dbConf = parse_ini_file($this->basePath . '.env', true);
+        $suffix = '.norm-db.env';
+        $envFile = $this->getDbEnvFileStr($suffix);
+        if (!$envFile) {
+            throw new Exception('无法找到数据配置文件，请在项目根目录下创建 ' . $suffix . ' 配置文件，详细信息参考 README');
+        }
+        $dbConf = parse_ini_file($envFile, true);
         $dbConf = $dbConf['DATABASE'] ?? [];
         $host = $dbConf['HOSTNAME'] ?? '';
         $port = $dbConf['HOSTPORT'] ?? 3306;
