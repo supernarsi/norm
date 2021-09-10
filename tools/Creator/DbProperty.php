@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tools\creator;
+namespace NormTools\Creator;
 
 class DbProperty
 {
