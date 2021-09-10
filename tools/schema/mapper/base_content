@@ -1,0 +1,10 @@
+<?php declare(strict_types=1);
+
+namespace {{namespace}};
+
+use {{modelFullClass}};
+use Norm\ORM\Mapper\BaseMapper;
+use Norm\ORM\Model\Model;
+
+class {{mapperClassName}} extends BaseMapper
+{

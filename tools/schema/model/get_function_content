@@ -1,0 +1,4 @@
+    public function {{functionName}}(): {{type}}
+    {
+        return $this->{{property}};
+    }
