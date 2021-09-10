@@ -30,5 +30,8 @@
             "tools\\": "tools/",
             "tests\\": "tests/"
         }
-    }
+    },
+    "bin": [
+        "bin/norm-create"
+    ]
 }

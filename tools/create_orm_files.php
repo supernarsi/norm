@@ -38,7 +38,7 @@ try {
         echo "[error] 创建 Model 失败\n";
     }
 
-// 创建 mapper
+    // 创建 mapper
     $creator = new OrmMapperCreator($className, $tableName, $dirPath, $subDir);
     if ($creator->createField()) {
         echo '[info] 创建 Mapper 类成功，文件：' . $creator->getResFilePath() . "\n";
