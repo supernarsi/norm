@@ -171,7 +171,7 @@ abstract class BaseOrmCreator
     {
         $dir = $this->basePath;
         if (!file_exists($dir . $suffix)) {
-            $dir = $dir . '../../';
+            $dir = $dir . '../../../';
         }
         if (!file_exists($dir . $suffix)) {
             $dir = '';
