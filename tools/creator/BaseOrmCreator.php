@@ -10,6 +10,7 @@ abstract class BaseOrmCreator
     protected string $basePath = __DIR__ . '/../../';
     protected string $modelNamespace;
     protected string $mapperNamespace;
+    protected string $currentNamespace;
     /** @var string 创建的类名 */
     protected string $modelClassName;
     /** @var string mapper 的类名 */
@@ -43,8 +44,8 @@ abstract class BaseOrmCreator
         $this->tableName = $tableName;
         $this->modelNamespace = trim($this->commonBuildNamespace($baseDir, $subDir, 'Model'), '\\');
         $this->mapperNamespace = trim($this->commonBuildNamespace($baseDir, $subDir, 'Mapper'), '\\');
-        $currentNamespace = trim($this->buildCurrentClassNamespace($baseDir, $subDir), '\\');
-        $this->dirPath = $this->namespace2Dir($currentNamespace);
+        $this->currentNamespace = trim($this->buildCurrentClassNamespace($baseDir, $subDir), '\\');
+        $this->dirPath = $this->namespace2Dir($this->currentNamespace);
         if (!$this->checkDir($this->dirPath)) {
             throw new Exception('mkdir failed');
         }

@@ -3,6 +3,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use tools\creator\OrmModelCreator;
 use tools\creator\OrmMapperCreator;
+use tools\creator\OrmSelectorCreator;
 
 // 获取 class name
 fwrite(STDOUT, '请输入要创建的模型类名：');
@@ -18,6 +19,19 @@ $tableName = trim(fgets(STDIN));
 if (!$tableName) {
     echo "数据表名不能为空\n";
     exit();
+}
+
+// 是否需要创建 Selector
+while (true) {
+    fwrite(STDOUT, '是否需要创建 Selector 类[Y/N]：');
+    $createSelector = trim(fgets(STDIN));
+    $createSelector = strtolower(trim($createSelector));
+    if (!in_array($createSelector, ['', 'y', 'n'])) {
+        echo "请输入 Y 或 N（不输入则默认为 Y）\n";
+    } else {
+        $createSelector = ($createSelector == 'y' || $createSelector == '');
+        break;
+    }
 }
 
 // 获取目录路径
@@ -44,6 +58,16 @@ try {
         echo '[info] 创建 Mapper 类成功，文件：' . $creator->getResFilePath() . "\n";
     } else {
         echo "[error] 创建 Mapper 失败\n";
+    }
+
+    if ($createSelector) {
+        // 创建 selector
+        $creator = new OrmSelectorCreator($className, $tableName, $dirPath, $subDir);
+        if ($creator->createField()) {
+            echo '[info] 创建 Selector 类成功，文件：' . $creator->getResFilePath() . "\n";
+        } else {
+            echo "[error] 创建 Selector 失败\n";
+        }
     }
 } catch (Exception $e) {
     echo '[error] 执行失败：' . $e->getMessage() . "\n";

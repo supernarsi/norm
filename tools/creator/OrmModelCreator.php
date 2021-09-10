@@ -8,7 +8,7 @@ class OrmModelCreator extends BaseOrmCreator
 
     protected function getModelFile(string $file)
     {
-        return $this->getFile($file, 'Model');
+        return $this->getFile($file, 'model');
     }
 
     /**
