@@ -35,7 +35,7 @@ abstract class BaseOrmCreator
      */
     public function __construct(string $className, string $tableName, string $baseDir = 'app/orm/', string $subDir = '')
     {
-        if (!$className) {
+        if (!$className || !$tableName) {
             throw new Exception('param lost');
         }
         $this->modelClassName = $className;
@@ -48,30 +48,13 @@ abstract class BaseOrmCreator
         if (!$this->checkDir($this->dirPath)) {
             throw new Exception('mkdir failed');
         }
-
-        $this->filePath = $this->getFullFilePath($this->classType);
-        $tableName && $this->parseDBTable($tableName);
+        $this->parseDBTable($tableName);
     }
 
-    protected function getFullFilePath(string $type): string
+    protected function getFullFilePath(string $className): string
     {
-        switch ($type) {
-            case 'Mapper':
-                $className = $this->mapperClassName;
-                break;
-            case 'Model':
-            default:
-                $className = $this->modelClassName;
-                break;
-        }
-        $filePath = $this->dirPath . '/' . $className . '.php';
-        if (file_exists($filePath)) {
-            throw new Exception('file exists: ' . $filePath);
-        }
-        return $filePath;
+        return $this->dirPath . '/' . $className . '.php';
     }
-
-    //abstract protected function buildBaseContent(string $className, string $baseModelName);
 
     /**
      * 文件目录转换为 namespace
@@ -231,5 +214,18 @@ abstract class BaseOrmCreator
     protected function getFile(string $fileName, string $type)
     {
         return file_get_contents(__DIR__ . '/../schema/' . $type . '/' . $fileName);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkFileExist(): bool
+    {
+        return file_exists($this->filePath);
+    }
+
+    public function getResFilePath(): string
+    {
+        return $this->filePath;
     }
 }

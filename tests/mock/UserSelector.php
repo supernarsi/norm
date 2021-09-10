@@ -2,6 +2,7 @@
 
 namespace tests\mock;
 
+use Norm\ORM\Model\Model;
 use Norm\ORM\Selector\Selector;
 
 class UserSelector extends Selector
@@ -12,7 +13,7 @@ class UserSelector extends Selector
     }
 
     /**
-     * @return User
+     * @return User|Model
      */
     public function createModel(): User
     {

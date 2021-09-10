@@ -83,8 +83,12 @@ class OrmMapperCreator extends BaseOrmCreator
         return str_replace('{{content}}', $tmpStr, $content);
     }
 
-    public function createField()
+    public function createField(): bool
     {
+        $this->filePath = $this->getFullFilePath($this->mapperClassName);
+        if ($this->checkFileExist()) {
+            return false;
+        }
         // 不存在则创建文件
         $fp = fopen($this->filePath, "w");
         // 写文件基础内容
@@ -94,7 +98,6 @@ class OrmMapperCreator extends BaseOrmCreator
         fwrite($fp, $this->buildInitModelFunc());
         fwrite($fp, $this->buildPrepareSaveFunc());
         $this->writeFinish($fp);
-
-        echo '创建 Mapper 类成功，文件：' . $this->filePath . "\n";
+        return true;
     }
 }
