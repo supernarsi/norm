@@ -1,5 +1,4 @@
 #!/usr/bin/env php
 <?php
 
-$dir = __DIR__ . '/..';
-require $dir . '/tools/create_orm_files.php';
+require __DIR__ . '/../tools/create_orm_files.php';

@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/autoload.php';
 
 use tools\creator\OrmModelCreator;
 use tools\creator\OrmMapperCreator;
