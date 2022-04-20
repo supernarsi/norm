@@ -17,50 +17,29 @@ abstract class Model
     public const STA_OFF = 2;
     public const STA_TEST = 3;
 
-    /**
-     * @var array 对象中被 set 过的属性
-     */
+    /** @var array 对象中被 set 过的属性 */
     protected array $beSetProperties = [];
-
-    /**
-     * @var Mapper|null
-     */
+    /** @var Mapper|null */
     protected ?Mapper $mapper;
 
-    /**
-     * @return int
-     */
+    /** @return int */
     abstract public function getId(): int;
 
-    /**
-     * @param string $field
-     * @return bool
-     */
     public function modelPropertyIsSet(string $field): bool
     {
         return ($this->beSetProperties[$field] ?? false) === true;
     }
 
-    /**
-     * @return array
-     */
     public function getModelProperties(): array
     {
         return $this->beSetProperties;
     }
 
-    /**
-     * @return Mapper|null
-     */
     public function getMapper(): ?Mapper
     {
         return $this->mapper;
     }
 
-    /**
-     * @param array $initData
-     * @return $this|null
-     */
     protected function initORM(array $initData = []): ?self
     {
         return $this->mapper ? $this->mapper->initModel($this, $initData) : null;
@@ -95,7 +74,8 @@ abstract class Model
      */
     public function setProperty(string $field, $val): self
     {
-        isset($this->beSetProperties[$field]) && ($this->beSetProperties[$field] = true) && ($this->$field = $val);
+        isset($this->beSetProperties[$field]) && ($this->beSetProperties[$field] = true);
+        $this->$field = $val;
         return $this;
     }
 
@@ -108,10 +88,6 @@ abstract class Model
         return $fields ?: ($this->mapper ? $this->mapper->prepareSaveData($this) : []);
     }
 
-    /**
-     * @param IStorage $db
-     * @return $this|null
-     */
     public function insert(IStorage $db): ?self
     {
         if (!$this->mapper) {

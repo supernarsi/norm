@@ -13,6 +13,7 @@ use tests\mock\UserMapper;
  *
  * @package tests\units\ORM\Selector
  * @covers \Norm\ORM\Model\Model
+ * @covers \Norm\ORM\Model\SModel
  * @covers \Norm\ORM\Mapper\BaseMapper
  * @covers \tests\mock\User
  * @covers \tests\mock\UserMapper
@@ -61,10 +62,10 @@ class UserTest extends TestCase
         $this->assertSame(['id' => 42], $tester->getModelFields());
 
         // case3
-        $userData = ['id' => 42, 'nick' => 'init-name'];
+        $userData = ['id' => 42, 'nick' => 'init-name-42'];
         $tester = new User($userData, new UserMapper(), false);
         $this->assertSame(['test'], $tester->getModelFields(['test']));
-        $this->assertSame(['id' => 42, 'nick' => 'init-name'], $tester->getModelFields());
+        $this->assertSame(['id' => 42, 'nick' => 'init-name-42'], $tester->getModelFields());
     }
 
     public function testInsert()
@@ -156,5 +157,16 @@ class UserTest extends TestCase
     {
         $tester = $this->getMockForAbstractClass(Model::class);
         $this->assertSame([], $tester->render());
+    }
+
+    public function testSerialize()
+    {
+        $tester = (new User())->setId(123)->setNick('nick-test');
+        $serializedUser = serialize($tester);
+        $unSerializeUser = unserialize($serializedUser);
+        $this->assertInstanceOf(User::class, $unSerializeUser);
+        $this->assertSame(123, $unSerializeUser->getId());
+        $unSerializeUser->setId(321);
+        $this->assertSame(321, $unSerializeUser->getId());
     }
 }

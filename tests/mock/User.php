@@ -2,9 +2,9 @@
 
 namespace tests\mock;
 
-use Norm\ORM\Model\Model;
+use Norm\ORM\Model\SModel;
 
-class User extends Model
+class User extends SModel
 {
     protected int $id = 0;
     protected string $nick = '';
