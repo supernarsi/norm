@@ -1,44 +1,31 @@
 <?php declare(strict_types=1);
 
-namespace tools\creator;
+namespace NormTools\Creator;
 
 use Exception;
 use PDO;
 
 abstract class BaseOrmCreator
 {
-    protected string $modelNamespace = '';
     protected string $basePath = __DIR__ . '/../../';
-    protected string $namespace;
-    protected string $className;
+    protected string $modelNamespace;
+    protected string $mapperNamespace;
+    protected string $currentNamespace;
+    /** @var string 创建的类名 */
+    protected string $modelClassName;
+    /** @var string mapper 的类名 */
+    protected string $mapperClassName;
+    /** @var string 关联的表名 */
     protected string $tableName;
+    /** @var string 新建问价的完整路径 */
     protected string $filePath = '';
+    /** @var string 新建类所在目录的完整路径 */
     protected string $dirPath = '';
-    protected string $subDir;
 
     /**
      * @var DbProperty[]
      */
     protected array $properties = [];
-
-    abstract protected function fileExist();
-
-    abstract protected function writeBaseContent(string $className, string $baseModelName);
-
-    protected function dir2Namespace(string $dir)
-    {
-        return str_replace('/', '\\', trim($dir, '/'));
-    }
-
-    protected function namespace2Dir(string $namespace)
-    {
-        return str_replace('\\', '/', trim($namespace, '\\'));
-    }
-
-    protected function buildNamespaceStr(string $baseDir, string $subDir): string
-    {
-        return $this->dir2Namespace($baseDir) . '\\' . $this->modelNamespace . '\\' . $this->dir2Namespace($subDir);
-    }
 
     /**
      * @param string $className
@@ -52,14 +39,79 @@ abstract class BaseOrmCreator
         if (!$className || !$tableName) {
             throw new Exception('param lost');
         }
-        $this->className = $className;
-        $this->tableName = $tableName;
-        $this->dirPath = $baseDir;
-        $this->subDir = $subDir;
-        $this->namespace = trim($this->buildNamespaceStr($baseDir, $subDir), '\\');
-        $this->dirPath = $this->namespace2Dir($this->namespace);
-        $this->filePath = $this->fileExist();
         $this->parseDBTable($tableName);
+        $this->modelClassName = $className;
+        $this->mapperClassName = $className . 'Mapper';
+        //$this->tableName = $tableName;
+        $this->modelNamespace = trim($this->commonBuildNamespace($baseDir, $subDir, 'Model'), '\\');
+        $this->mapperNamespace = trim($this->commonBuildNamespace($baseDir, $subDir, 'Mapper'), '\\');
+        $this->currentNamespace = trim($this->buildCurrentClassNamespace($baseDir, $subDir), '\\');
+        $this->dirPath = $this->namespace2Dir($this->currentNamespace);
+        if (!$this->checkDir($this->dirPath)) {
+            throw new Exception('mkdir failed');
+        }
+    }
+
+    protected function getFullFilePath(string $className): string
+    {
+        return $this->dirPath . '/' . $className . '.php';
+    }
+
+    /**
+     * 文件目录转换为 namespace
+     *
+     * @param string $dir
+     * @return string
+     */
+    protected function dir2Namespace(string $dir): string
+    {
+        return str_replace('/', '\\', trim($dir, '/'));
+    }
+
+    /**
+     * namespace 转换为目录路径
+     *
+     * @param string $namespace
+     * @return string
+     */
+    protected function namespace2Dir(string $namespace): string
+    {
+        return str_replace('\\', '/', trim($namespace, '\\'));
+    }
+
+    /**
+     * 组装完整的 namespace
+     *
+     * @param string $baseDir
+     * @param string $subDir
+     * @return string
+     */
+    protected function buildCurrentClassNamespace(string $baseDir, string $subDir): string
+    {
+        return $this->commonBuildNamespace($baseDir, $subDir, $this->classType);
+    }
+
+    /**
+     * @param string $baseDir
+     * @param string $subDir
+     * @param string $middle
+     * @return string
+     */
+    protected function commonBuildNamespace(string $baseDir, string $subDir, string $middle): string
+    {
+        return $this->dir2Namespace($baseDir) . '\\' . $middle . '\\' . $this->dir2Namespace($subDir);
+    }
+
+    /**
+     * @param string $dirPath
+     * @return bool
+     */
+    protected function checkDir(string $dirPath): bool
+    {
+        if (!is_dir($dirPath)) {
+            return mkdir($dirPath, 0777, true);
+        }
+        return true;
     }
 
     /**
@@ -110,20 +162,52 @@ abstract class BaseOrmCreator
     }
 
     /**
+     * 获取配置文件地址
+     *
+     * @param string $suffix
+     * @return string
+     */
+    protected function getDbEnvFileStr(string $suffix): string
+    {
+        $dir = $this->basePath;
+        if (!file_exists($dir . $suffix)) {
+            $dir = $dir . '../../../';
+        }
+        if (!file_exists($dir . $suffix)) {
+            $dir = '';
+        }
+        return $dir ? $dir . $suffix : '';
+    }
+
+    /**
      * 从配置文件中解析出 db 配置
      *
      * @param string $tableName
      * @return DbProperty[]
+     * @throws Exception
      */
     protected function parseDBTable(string $tableName): array
     {
-        $dbConf = parse_ini_file($this->basePath . '.env', true);
+        $suffix = '.norm-db.env';
+        $envFile = $this->getDbEnvFileStr($suffix);
+        if (!$envFile) {
+            throw new Exception('无法找到数据配置文件，请在项目根目录下创建 ' . $suffix . ' 配置文件，详细信息参考 README');
+        }
+        $dbConf = parse_ini_file($envFile, true);
         $dbConf = $dbConf['DATABASE'] ?? [];
         $host = $dbConf['HOSTNAME'] ?? '';
         $port = $dbConf['HOSTPORT'] ?? 3306;
         $user = $dbConf['USERNAME'] ?? '';
         $pass = $dbConf['PASSWORD'] ?? '';
         $base = $dbConf['DATABASE'] ?? '';
+
+        // 兼容 database.table 格式的参数
+        $tableNameArr = explode('.', $tableName);
+        if (count($tableNameArr) == 2) {
+            $tableName = $tableNameArr[1] ?? '';
+            $base = $tableNameArr[0] ?? '';
+        }
+        $this->tableName = $tableName;
         $pdo = new PDO("mysql:host=$host;sort=$port;dbname=$base;", $user, $pass);
         $stmt = $pdo->prepare('DESCRIBE ' . $tableName);
         $stmt->execute();
@@ -153,5 +237,28 @@ abstract class BaseOrmCreator
             }
             fgets($fp);
         }
+    }
+
+    /**
+     * @param string $fileName
+     * @param string $type
+     * @return false|string
+     */
+    protected function getFile(string $fileName, string $type)
+    {
+        return file_get_contents(__DIR__ . '/../schema/' . $type . '/' . $fileName);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkFileExist(): bool
+    {
+        return file_exists($this->filePath);
+    }
+
+    public function getResFilePath(): string
+    {
+        return $this->filePath;
     }
 }

@@ -1,12 +1,28 @@
 <?php declare(strict_types=1);
 
-namespace tools\creator;
-
-use Exception;
+namespace NormTools\Creator;
 
 class OrmModelCreator extends BaseOrmCreator
 {
-    protected string $modelNamespace = 'Model';
+    protected string $classType = 'Model';
+
+    protected function getModelFile(string $file)
+    {
+        return $this->getFile($file, 'model');
+    }
+
+    /**
+     * 写 Model 类的基础代码
+     *
+     * @param string $className
+     * @return string
+     */
+    private function buildBaseContent(string $className): string
+    {
+        $baseContent = $this->getModelFile('base_content');
+        $baseContent = str_replace('{{namespace}}', $this->modelNamespace, $baseContent);
+        return str_replace('{{className}}', $className, $baseContent);
+    }
 
     /**
      * 构造 Model 的单个属性的文件内容
@@ -19,7 +35,7 @@ class OrmModelCreator extends BaseOrmCreator
     {
         $fieldType = $this->parseDbFieldType($fieldType);
         $val = $this->dbDefaultVal($fieldType);
-        $content = $this->getFile('class_property_content');
+        $content = $this->getModelFile('class_property_content');
         $content = str_replace('{{fieldName}}', $fieldName, $content);
         $content = str_replace('{{fieldType}}', $fieldType, $content);
         return str_replace('{{val}}', $val, $content);
@@ -35,7 +51,7 @@ class OrmModelCreator extends BaseOrmCreator
     private function buildGetFunction(string $property, string $type): string
     {
         $functionName = 'get' . ucfirst($property);
-        $content = $this->getFile('get_function_content');
+        $content = $this->getModelFile('get_function_content');
         $content = str_replace('{{type}}', $type, $content);
         $content = str_replace('{{property}}', $property, $content);
         return str_replace('{{functionName}}', $functionName, $content);
@@ -52,7 +68,7 @@ class OrmModelCreator extends BaseOrmCreator
     private function buildSetFunction(string $property, string $type, string $className): string
     {
         $functionName = 'set' . ucfirst($property);
-        $content = $this->getFile('set_function_content');
+        $content = $this->getModelFile('set_function_content');
         $content = str_replace('{{functionName}}', $functionName, $content);
         $content = str_replace('{{type}}', $type, $content);
         $content = str_replace('{{property}}', $property, $content);
@@ -85,22 +101,10 @@ class OrmModelCreator extends BaseOrmCreator
             $modelFieldName = $property->getModelFieldName();
             $fieldName = $property->getDbFieldName();
             $functionName = 'get' . ucfirst($modelFieldName);
-            $str .= <<<renderdata
-            '$fieldName' => \$this->$functionName(),\n
-renderdata;
+            $str .= "            '$fieldName' => \$this->$functionName(),\n";
         }
-        $content = $this->getFile('render_content');
+        $content = $this->getModelFile('render_content');
         return str_replace('{{renderContent}}', $str, $content);
-    }
-
-    /**
-     * 将属性内容写入文件
-     *
-     * @param $fp
-     */
-    protected function writePropertiesContent($fp)
-    {
-        fwrite($fp, $this->buildPropertiesContent());
     }
 
     /**
@@ -112,10 +116,8 @@ renderdata;
      */
     protected function writeSetAndGetFunc($fp, string $propertyName, string $type)
     {
-        $str = $this->buildGetFunction($propertyName, $type) . "\n";
-        fwrite($fp, $str);
-        $str = $this->buildSetFunction($propertyName, $type, $this->className) . "\n";
-        fwrite($fp, $str);
+        fwrite($fp, $this->buildGetFunction($propertyName, $type) . "\n");
+        fwrite($fp, $this->buildSetFunction($propertyName, $type, $this->modelClassName) . "\n");
     }
 
     /**
@@ -132,70 +134,25 @@ renderdata;
     }
 
     /**
-     * 写 render 方法
-     *
-     * @param $fp
-     */
-    protected function writeRenderContent($fp)
-    {
-        fwrite($fp, $this->buildRenderContent());
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function fileExist(): string
-    {
-        $className = $this->className;
-        $filePath = $this->dirPath . '/' . $className . '.php';
-        if (file_exists($filePath)) {
-            throw new Exception('file exists: ' . $filePath);
-        }
-        // 不存在则创建文件
-        $newClassFile = fopen($filePath, "w");
-        // 创建类文件
-        $baseContent = $this->writeBaseContent($className, 'Model');
-        fwrite($newClassFile, $baseContent);
-        return $filePath;
-    }
-
-    /**
-     * 写 Model 类的基础代码
-     *
-     * @param string $className
-     * @param string $baseModelName
-     * @return string
-     */
-    public function writeBaseContent(string $className, string $baseModelName): string
-    {
-        $namespace = trim($this->namespace, '/') . '\'' . $this->modelNamespace . '\\' . $this->subDir;
-        $baseContent = $this->getFile('base_content');
-        $baseContent = str_replace('{{namespace}}', $namespace, $baseContent);
-        $baseContent = str_replace('{{className}}', $className, $baseContent);
-        return str_replace('{{baseModelName}}', $baseModelName, $baseContent);
-    }
-
-    /**
      * 创建文件
      */
-    public function createField()
+    public function createField(): bool
     {
-        // 打开文件
-        $fp = fopen($this->filePath, 'r+');
-        $this->moveCursor($fp, 9);
+        $this->filePath = $this->getFullFilePath($this->modelClassName);
+        if ($this->checkFileExist()) {
+            return false;
+        }
+        // 不存在则创建文件
+        $fp = fopen($this->filePath, "w");
+        // 写文件基础内容
+        fwrite($fp, $this->buildBaseContent($this->modelClassName));
         // 写属性内容
-        $this->writePropertiesContent($fp);
+        fwrite($fp, $this->buildPropertiesContent());
+        // 写 set & get 方法
         $this->writeSetGetProperties($fp);
-        $this->writeRenderContent($fp);
+        // 写 render 方法
+        fwrite($fp, $this->buildRenderContent());
         $this->writeFinish($fp);
-    }
-
-    /**
-     * @param string $fileName
-     * @return false|string
-     */
-    protected function getFile(string $fileName)
-    {
-        return file_get_contents(__DIR__ . '/../schema/model/' . $fileName);
+        return true;
     }
 }
