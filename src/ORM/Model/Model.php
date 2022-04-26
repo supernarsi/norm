@@ -97,9 +97,7 @@ abstract class Model
         if (!$id) {
             return null;
         }
-        $data = $this->getModelFields();
-        $data['id'] = $id;
-        return $this->initORM($data);
+        return $this->setProperty('id', $id);
     }
 
     public function update(IStorage $db): ?self
