@@ -20,7 +20,9 @@ class OrmSelectorCreator extends BaseOrmCreator
         $content = str_replace('{{mapperNamespace}}', $this->mapperNamespace . '\\' . $this->mapperClassName, $content);
         $content = str_replace('{{modelClass}}', $this->modelClassName, $content);
         $content = str_replace('{{mapperClass}}', $this->mapperClassName, $content);
-        return str_replace('{{selectorClass}}', $selectorClassName, $content);
+        $content = str_replace('{{selectorClass}}', $selectorClassName, $content);
+        $content .= "\n";
+        return $content;
     }
 
     /**

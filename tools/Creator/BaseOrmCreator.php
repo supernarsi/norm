@@ -132,7 +132,11 @@ abstract class BaseOrmCreator
      */
     protected function parseDbFieldType(string $typeStr): string
     {
-        return strstr($typeStr, 'int') !== false ? 'int' : 'string';
+        if (strstr($typeStr, 'int') !== false || $typeStr == 'bit(1)') {
+            return 'int';
+        } else {
+            return 'string';
+        }
     }
 
     /**
