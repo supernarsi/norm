@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/autoload.php';
 
-use NormTools\Creator\OrmModelCreator;
-use NormTools\Creator\OrmMapperCreator;
-use NormTools\Creator\OrmSelectorCreator;
+use NormTools\Creater\OrmModelCreator;
+use NormTools\Creater\OrmMapperCreator;
+use NormTools\Creater\OrmSelectorCreator;
 
 // 获取 class name
 fwrite(STDOUT, '请输入要创建的模型类名：');

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace NormTools\Creator;
+namespace NormTools\Creater;
 
 use Exception;
 use PDO;
@@ -132,7 +132,11 @@ abstract class BaseOrmCreator
      */
     protected function parseDbFieldType(string $typeStr): string
     {
-        return strstr($typeStr, 'int') !== false ? 'int' : 'string';
+        if (strstr($typeStr, 'int') !== false || $typeStr == 'bit(1)') {
+            return 'int';
+        } else {
+            return 'string';
+        }
     }
 
     /**
