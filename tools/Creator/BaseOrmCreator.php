@@ -213,7 +213,7 @@ abstract class BaseOrmCreator
         }
         $this->tableName = $tableName;
         $pdo = new PDO("mysql:host=$host;sort=$port;dbname=$base;", $user, $pass);
-        $stmt = $pdo->prepare('DESCRIBE ' . $tableName);
+        $stmt = $pdo->prepare('DESCRIBE `' . $tableName . '`');
         $stmt->execute();
         $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($fields as $field) {
