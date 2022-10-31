@@ -132,24 +132,13 @@ abstract class BaseOrmCreator
      */
     protected function parseDbFieldType(string $typeStr): string
     {
-        $typeStr = strtolower($typeStr);
-        switch ($typeStr) {
-            case 'bit(1)':
-            case 'int':
-            case 'tinyint':
-            case 'smallint':
-            case 'mediumint':
-            case 'bigint':
-            case 'numeric':
-                return 'int';
-            case 'float':
-            case 'double':
-            case 'decimal':
-                return 'float';
-            case 'bool':
-                return 'bool';
-            default:
-                return 'string';
+        $t = strtolower($typeStr);
+        if (strstr($t, 'int') !== false || $t == 'bit(1)') {
+            return 'int';
+        } elseif (strstr($t, 'decimal') !== false || strstr($t, 'double') !== false || strstr($t, 'float') !== false) {
+            return 'float';
+        } else {
+            return 'string';
         }
     }
 
@@ -161,7 +150,14 @@ abstract class BaseOrmCreator
      */
     protected function dbDefaultVal(string $fieldType)
     {
-        return $fieldType == 'int' ? 0 : "''";
+        switch ($fieldType) {
+            case 'int':
+                return 0;
+            case 'bool':
+                return false;
+            default:
+                return '';
+        }
     }
 
     /**
