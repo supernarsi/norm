@@ -152,11 +152,12 @@ abstract class BaseOrmCreator
     {
         switch ($fieldType) {
             case 'int':
+            case 'float':
                 return 0;
             case 'bool':
-                return false;
+                return 'false';
             default:
-                return '';
+                return "''";
         }
     }
 
