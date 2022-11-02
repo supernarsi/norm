@@ -64,10 +64,10 @@ abstract class BaseMapper implements Mapper
         return $db->setCondition($query)->findData();
     }
 
-    public function select(IStorage $db, DQuery $query): array
+    public function select(IStorage $db, DQuery $query, string $fields = ''): array
     {
         $this->resetDb($db);
-        return $db->setCondition($query)->selectData();
+        return $db->setCondition($query)->selectData($fields);
     }
 
     public function find(IStorage $db, int $id): array

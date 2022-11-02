@@ -17,9 +17,10 @@ interface IStorage
     public function setCondition(DQuery $query): self;
 
     /**
+     * @param string $fields
      * @return array
      */
-    public function selectData(): array;
+    public function selectData(string $fields = ''): array;
 
     /**
      * @return array

@@ -30,7 +30,7 @@ interface Mapper
 
     public function findObjWhere(IStorage $db, DQuery $query): ?Model;
 
-    public function select(IStorage $db, DQuery $query): array;
+    public function select(IStorage $db, DQuery $query, string $fields = ''): array;
 
     public function selectObjs(IStorage $db, DQuery $query, string $field = ''): array;
 
