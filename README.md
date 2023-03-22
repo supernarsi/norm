@@ -22,3 +22,7 @@ goto vendor dir, and run
 ```shell
 ./bin/norm-create
 ```
+
+
+## todo list: 
+support partition tables

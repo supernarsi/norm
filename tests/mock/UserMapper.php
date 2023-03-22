@@ -10,9 +10,14 @@ class UserMapper extends BaseMapper
     protected static string $tableName = 'user';
     protected string $modelName = User::class;
 
-    public function getTableName(): string
+    public function getTableName(bool $isPartition = false, string $partitionIdx = '', bool $prefixMod = false): string
     {
-        return self::$tableName;
+        return $isPartition ? $this->getPartitionTableName($partitionIdx, $prefixMod) : self::$tableName;
+    }
+
+    public function getPartitionTableName(string $partitionIdx, bool $prefixMod = false): string
+    {
+        return $prefixMod ? $partitionIdx . self::$tableName : self::$tableName . $partitionIdx;
     }
 
     public function prepareSaveData(Model $model): array

@@ -11,7 +11,7 @@ abstract class BaseMapper implements Mapper
     /** @var string $modelName must extend the Norm\ORM\Model */
     protected string $modelName;
 
-    abstract public function getTableName(): string;
+    abstract public function getTableName(bool $isPartition, string $partitionIdx, bool $prefixMod = false): string;
 
     protected function newModel(array $modelData, bool $unsetProperty): Model
     {
