@@ -14,7 +14,7 @@ use tests\mock\UserMapper;
  *
  * @package tests\units\ORM\Mapper
  * @covers \Norm\ORM\Mapper\BaseMapper
- * @uses   \Norm\DB\DQuery
+ * @uses   DQuery
  * @uses   \Norm\DB\DWhere
  * @uses   \Norm\ORM\Model\Model
  */

@@ -19,7 +19,7 @@ class DQueryTest extends TestCase
         $query = (new DQuery())->where('test', '>=', 12)
             ->where('test2', '=', 'dd')
             ->order('sort', DQuery::DESC)
-            ->order('weight', DQuery::ASC)
+            ->order('weight')
             ->orderField('k1', ['v1', 'v2'])
             ->page(1, 2);
 

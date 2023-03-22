@@ -13,10 +13,6 @@ use Norm\ORM\Mapper\Mapper;
  */
 abstract class Model
 {
-    public const STA_ON = 1;
-    public const STA_OFF = 2;
-    public const STA_TEST = 3;
-
     /** @var array 对象中被 set 过的属性 */
     protected array $beSetProperties = [];
     /** @var Mapper|null */

@@ -9,19 +9,13 @@ use Norm\ORM\Model\Model;
 
 abstract class Selector
 {
-    /**
-     * @var IStorage
-     */
+    /** @var IStorage */
     protected IStorage $db;
 
-    /**
-     * @var Mapper
-     */
+    /** @var Mapper */
     protected Mapper $mapper;
 
-    /**
-     * @return Mapper
-     */
+    /** @return Mapper */
     abstract protected function setModelMapper(): Mapper;
 
     /**
@@ -39,17 +33,13 @@ abstract class Selector
         return $this->db;
     }
 
-    /**
-     * @return Model
-     */
+    /** @return Model */
     public function createModel(): Model
     {
         return $this->mapper->createModel();
     }
 
-    /**
-     * @return Mapper
-     */
+    /** @return Mapper */
     public function getMapper(): Mapper
     {
         return $this->mapper;
