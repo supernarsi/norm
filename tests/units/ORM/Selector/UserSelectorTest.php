@@ -7,9 +7,9 @@ use Norm\DB\IStorage;
 use Norm\ORM\Mapper\Mapper;
 use Norm\ORM\Selector\Selector;
 use PHPUnit\Framework\TestCase;
-use tests\mock\User;
-use tests\mock\UserMapper;
-use tests\mock\UserSelector;
+use tests\mock\user\User;
+use tests\mock\user\UserMapper;
+use tests\mock\user\UserSelector;
 
 /**
  * class UserSelectorTest
@@ -20,9 +20,9 @@ use tests\mock\UserSelector;
  * @covers \Norm\ORM\Model\Model
  * @covers \Norm\ORM\Mapper\BaseMapper
  * @covers \Norm\ORM\Selector\Selector
- * @covers \tests\mock\User
- * @covers \tests\mock\UserMapper
- * @covers \tests\mock\UserSelector
+ * @covers \tests\mock\user\User
+ * @covers \tests\mock\user\UserMapper
+ * @covers \tests\mock\user\UserSelector
  */
 class UserSelectorTest extends TestCase
 {

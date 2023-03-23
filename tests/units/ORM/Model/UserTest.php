@@ -5,8 +5,8 @@ namespace tests\units\ORM\Model;
 use Norm\DB\IStorage;
 use Norm\ORM\Model\Model;
 use PHPUnit\Framework\TestCase;
-use tests\mock\User;
-use tests\mock\UserMapper;
+use tests\mock\user\User;
+use tests\mock\user\UserMapper;
 
 /**
  * class UserTest
@@ -15,8 +15,8 @@ use tests\mock\UserMapper;
  * @covers \Norm\ORM\Model\Model
  * @covers \Norm\ORM\Model\SModel
  * @covers \Norm\ORM\Mapper\BaseMapper
- * @covers \tests\mock\User
- * @covers \tests\mock\UserMapper
+ * @covers \tests\mock\user\User
+ * @covers \tests\mock\user\UserMapper
  * @uses   \Norm\DB\DQuery
  * @uses   \Norm\DB\DWhere
  */

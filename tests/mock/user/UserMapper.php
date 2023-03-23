@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock;
+namespace tests\mock\user;
 
 use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
