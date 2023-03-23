@@ -38,8 +38,7 @@ Execute the following commands in the vendor directory, and enter the correspond
 
 # Features
 
-- The main features of Norm ORM Library are:
-- Connect to databases
+The main features of Norm ORM Library are:
 - Map objects to database tables
 - Access data in database tables through model classes
 - Support complex queries
