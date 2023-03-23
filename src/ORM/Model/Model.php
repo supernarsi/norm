@@ -15,10 +15,8 @@ abstract class Model
 {
     /** @var array 对象中被 set 过的属性 */
     protected array $beSetProperties = [];
-    /** @var Mapper|null */
     protected ?Mapper $mapper;
 
-    /** @return int */
     abstract public function getId(): int;
 
     public function modelPropertyIsSet(string $field): bool

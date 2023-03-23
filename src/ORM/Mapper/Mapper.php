@@ -24,7 +24,7 @@ interface Mapper
 
     public function find(IStorage $db, int $id): array;
 
-    public function findWhere(IStorage $db, DQuery $query);
+    public function findWhere(IStorage $db, DQuery $query): array;
 
     public function findObj(IStorage $db, int $id): ?Model;
 
