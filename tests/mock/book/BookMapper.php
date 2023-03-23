@@ -1,41 +1,41 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\user;
+namespace tests\mock\book;
 
 use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
 
-class UserMapper extends BaseMapper
+class BookMapper extends BaseMapper
 {
-    protected static string $tableName = 'user';
-    protected string $modelName = User::class;
+    protected static string $tableName = 'book';
+    protected string $modelName = Book::class;
 
     public function getTableName(bool $isPartition = false, string $partitionIdx = '', bool $prefixMod = false): string
     {
-        return $isPartition ? $this->getPartitionTableName($partitionIdx, $prefixMod) : self::$tableName;
+        return self::$tableName;
     }
 
     /**
-     * @param User $model
+     * @param Book $model
      * @return array
      */
     public function prepareSaveData(Model $model): array
     {
         $dbFields = ['id' => $model->getId()];
         $model->modelPropertyIsSet('id') && $dbFields['id'] = $model->getId();
-        $model->modelPropertyIsSet('nick') && $dbFields['nick'] = $model->getNick();
+        $model->modelPropertyIsSet('name') && $dbFields['name'] = $model->getName();
         return $dbFields;
     }
 
     /**
-     * @param User $model
+     * @param Book $model
      * @param array $data
-     * @return User
+     * @return Book
      */
-    public function initModel(Model $model, array $data = []): User
+    public function initModel(Model $model, array $data = []): Book
     {
         $model->setId((int)($data['id'] ?? 0));
-        $model->setNick((string)($data['nick'] ?? ''));
+        $model->setName((string)($data['name'] ?? ''));
         return $model;
     }
 }

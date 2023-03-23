@@ -22,9 +22,9 @@ class UserSelector extends Selector
 
     /**
      * @param int $id
-     * @return User|null
+     * @return ?User|Model
      */
-    public function getUser(int $id): ?User
+    public function getUser(int $id): Model
     {
         return $this->mapper->findObj($this->db, $id);
     }
