@@ -13,7 +13,7 @@ Install using Composer:
 composer require nineton-nasa/norm
 ```
 
-## Creating Model & Mapper
+# Creating Model & Mapper
 
 ## 1. Create a Database Configuration File
 
