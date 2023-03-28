@@ -2,6 +2,9 @@
 
 namespace NormTools\Creator;
 
+use Exception;
+use NormTools\Exception\NormException;
+
 class OrmModelCreator extends BaseOrmCreator
 {
     protected string $classType = 'Model';
@@ -16,12 +19,20 @@ class OrmModelCreator extends BaseOrmCreator
      *
      * @param string $className
      * @return string
+     * @throws NormException
      */
     private function buildBaseContent(string $className): string
     {
         $baseContent = $this->getModelFile('base_content');
-        $baseContent = str_replace('{{namespace}}', $this->modelNamespace, $baseContent);
-        return str_replace('{{className}}', $className, $baseContent);
+        if ($baseContent === false) {
+            throw new NormException("base_content file not found");
+        }
+        try {
+            $baseContent = str_replace('{{namespace}}', $this->modelNamespace, $baseContent);
+            return str_replace('{{className}}', $className, $baseContent);
+        } catch (Exception $e) {
+            throw new NormException($e->getMessage());
+        }
     }
 
     /**
@@ -30,15 +41,23 @@ class OrmModelCreator extends BaseOrmCreator
      * @param string $fieldName
      * @param string $fieldType
      * @return string
+     * @throws NormException
      */
     private function buildProperty(string $fieldName, string $fieldType): string
     {
         $fieldType = $this->parseDbFieldType($fieldType);
         $val = $this->dbDefaultVal($fieldType);
         $content = $this->getModelFile('class_property_content');
-        $content = str_replace('{{fieldName}}', $fieldName, $content);
-        $content = str_replace('{{fieldType}}', $fieldType, $content);
-        return str_replace('{{val}}', $val, $content);
+        if ($content === false) {
+            throw new NormException("class_property_content file not found");
+        }
+        try {
+            $content = str_replace('{{fieldName}}', $fieldName, $content);
+            $content = str_replace('{{fieldType}}', $fieldType, $content);
+            return str_replace('{{val}}', $val, $content);
+        } catch (Exception $e) {
+            throw new NormException($e->getMessage());
+        }
     }
 
     /**
@@ -79,6 +98,7 @@ class OrmModelCreator extends BaseOrmCreator
      * 将所有属性组合
      *
      * @return string
+     * @throws NormException
      */
     private function buildPropertiesContent(): string
     {
@@ -135,15 +155,21 @@ class OrmModelCreator extends BaseOrmCreator
 
     /**
      * 创建文件
+     *
+     * @return bool
+     * @throws NormException
      */
     public function createField(): bool
     {
         $this->filePath = $this->getFullFilePath($this->modelClassName);
         if ($this->checkFileExist()) {
-            return false;
+            throw new NormException("{$this->modelClassName} already exists");
         }
         // 不存在则创建文件
         $fp = fopen($this->filePath, "w");
+        if ($fp === false) {
+            throw new NormException("{$this->modelClassName} create failed");
+        }
         // 写文件基础内容
         fwrite($fp, $this->buildBaseContent($this->modelClassName));
         // 写属性内容

@@ -1,8 +1,8 @@
     protected static string $tableName = '{{tableName}}';
     protected string $modelName = {{modelClassName}}::class;
 
-    public function getTableName(): string
+    public function getTableName(bool $isPartition, string $partitionIdx, bool $prefixMod = false): string
     {
-        return self::$tableName;
+        return $isPartition ? $this->getPartitionTableName($partitionIdx, $prefixMod) : self::$tableName;
     }
 

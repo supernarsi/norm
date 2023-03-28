@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\user;
+namespace tests\mock\Selector\user;
 
+use tests\mock\Model\user\User;
+use tests\mock\Mapper\user\UserMapper;
 use Norm\ORM\Model\Model;
 use Norm\ORM\Selector\Selector;
 
@@ -18,14 +20,5 @@ class UserSelector extends Selector
     public function createModel(): User
     {
         return parent::createModel();
-    }
-
-    /**
-     * @param int $id
-     * @return ?User|Model
-     */
-    public function getUser(int $id): Model
-    {
-        return $this->mapper->findObj($this->db, $id);
     }
 }
