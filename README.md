@@ -17,9 +17,9 @@ composer require nineton-nasa/norm
 
 ## 1. Create a Database Configuration File
 
-Create a `.norm-db.env` file in the same directory as the vendor directory, and modify the corresponding parameters (file content reference `.norm-db.env.example`).
+Create a `.norm-db.ini` file in the same directory as the vendor directory, and modify the corresponding parameters (file content reference `.norm-db.ini.example`).
 
-```dotenv
+```ini
 [DATABASE]
 HOSTNAME=127.0.0.1
 DATABASE=db-name

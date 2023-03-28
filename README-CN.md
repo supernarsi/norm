@@ -12,9 +12,9 @@ composer require nineton-nasa/norm
 
 ## 1. 创建数据库配置文件
 
-在项目 vendor 同级目录下创建 `.norm-db.env` 文件，并修改相应参数（文件内容参考 `.norm-db.env.example`）
+在项目 vendor 同级目录下创建 `.norm-db.ini` 文件，并修改相应参数（文件内容参考 `.norm-db.ini.example`）
 
-```dotenv
+```ini
 [DATABASE]
 HOSTNAME=127.0.0.1
 DATABASE=db-name

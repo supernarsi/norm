@@ -2,7 +2,7 @@
 
 namespace NormTools\Creator;
 
-use Exception;
+use NormTools\Exception\NormException;
 use PDO;
 
 abstract class BaseOrmCreator
@@ -32,12 +32,12 @@ abstract class BaseOrmCreator
      * @param string $tableName
      * @param string $baseDir
      * @param string $subDir
-     * @throws Exception
+     * @throws NormException
      */
     public function __construct(string $className, string $tableName, string $baseDir = 'app/orm/', string $subDir = '')
     {
         if (!$className || !$tableName) {
-            throw new Exception('param lost');
+            throw new NormException('param lost');
         }
         $this->parseDBTable($tableName);
         $this->modelClassName = $className;
@@ -48,7 +48,7 @@ abstract class BaseOrmCreator
         $this->currentNamespace = trim($this->buildCurrentClassNamespace($baseDir, $subDir), '\\');
         $this->dirPath = $this->namespace2Dir($this->currentNamespace);
         if (!$this->checkDir($this->dirPath)) {
-            throw new Exception('mkdir failed');
+            throw new NormException('mkdir failed');
         }
     }
 
@@ -199,16 +199,16 @@ abstract class BaseOrmCreator
      *
      * @param string $tableName
      * @return DbProperty[]
-     * @throws Exception
+     * @throws NormException
      */
     protected function parseDBTable(string $tableName): array
     {
-        $suffix = '.norm-db.env';
-        $envFile = $this->getDbEnvFileStr($suffix);
-        if (!$envFile) {
-            throw new Exception('无法找到数据配置文件，请在项目根目录下创建 ' . $suffix . ' 配置文件，详细信息参考 README');
+        $suffix = '.norm-db.ini';
+        $confFile = $this->getDbEnvFileStr($suffix);
+        if (!$confFile) {
+            throw new NormException('无法找到数据配置文件，请在项目根目录下创建 ' . $suffix . ' 配置文件，详细信息参考 README');
         }
-        $dbConf = parse_ini_file($envFile, true);
+        $dbConf = parse_ini_file($confFile, true);
         $dbConf = $dbConf['DATABASE'] ?? [];
         $host = $dbConf['HOSTNAME'] ?? '';
         $port = $dbConf['HOSTPORT'] ?? 3306;
@@ -236,12 +236,6 @@ abstract class BaseOrmCreator
         return $this->properties;
     }
 
-    /**
-     * 移动文件指针到指定行数
-     *
-     * @param resource $fp
-     * @param          $endLine
-     */
     protected function moveCursor($fp, $endLine)
     {
         $line = 0;
@@ -254,19 +248,11 @@ abstract class BaseOrmCreator
         }
     }
 
-    /**
-     * @param string $fileName
-     * @param string $type
-     * @return false|string
-     */
     protected function getFile(string $fileName, string $type)
     {
         return file_get_contents(__DIR__ . '/../schema/' . $type . '/' . $fileName);
     }
 
-    /**
-     * @return bool
-     */
     public function checkFileExist(): bool
     {
         return file_exists($this->filePath);
