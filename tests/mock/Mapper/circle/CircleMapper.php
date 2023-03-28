@@ -2,18 +2,18 @@
 
 namespace tests\mock\Mapper\circle;
 
-use Norm\ORM\Mapper\BasePartitionMapper;
 use tests\mock\Model\circle\Circle;
+use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
 
-class CircleMapper extends BasePartitionMapper
+class CircleMapper extends BaseMapper
 {
-    protected static string $baseTableName = 'circle';
+    protected static string $tableName = 'circle';
     protected string $modelName = Circle::class;
 
-    public function getTableName(bool $isPartition = false, string $parIdx = '', bool $preMod = false): string
+    public function getTableName(): string
     {
-        return $isPartition ? $this->getPartitionTableName($parIdx, $preMod) : self::$baseTableName;
+        return self::$tableName;
     }
 
     /**

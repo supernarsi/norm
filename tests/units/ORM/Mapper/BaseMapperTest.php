@@ -6,8 +6,8 @@ use Norm\DB\DQuery;
 use Norm\DB\IStorage;
 use Norm\ORM\Mapper\BaseMapper;
 use PHPUnit\Framework\TestCase;
-use tests\mock\Model\user\User;
 use tests\mock\Mapper\user\UserMapper;
+use tests\mock\Model\user\User;
 
 /**
  * class BaseMapperTest
@@ -32,8 +32,7 @@ class BaseMapperTest extends TestCase
     {
         $db = $this->createStub(IStorage::class);
         $db->method('updateData')->willReturn(true);
-        $res = $this->mapper->update($db, ['test' => 1]);
-        $this->assertTrue($res);
+        $this->assertTrue($this->mapper->update($db, ['test' => 1]));
     }
 
     public function testInsert()
@@ -93,7 +92,7 @@ class BaseMapperTest extends TestCase
         $model = $modelMapper->findObjWhere($db, (new DQuery())->where('id', '=', 2));
         $this->assertInstanceOf(User::class, $model);
         $this->assertSame(42, $model->getId());
-        $this->assertSame('', $model->getNickname());
+        $this->assertSame('', $model->getNick());
     }
 
     public function testSelectObjs()
@@ -108,22 +107,19 @@ class BaseMapperTest extends TestCase
         $db->method('setCondition')->willReturn($db);
         $db->method('selectData')->willReturn([['id' => 520, 'nick' => 'lu'], ['id' => 120, 'nick' => 'yz']]);
         $mapper = new UserMapper();
-
-        /** @var User[] $list */
         $list = $mapper->selectObjs($db, (new DQuery())->where('id', '>', 1));
         $this->assertCount(2, $list);
         $this->assertSame(520, $list[0]->getId());
         $this->assertSame(120, $list[1]->getId());
-        $this->assertSame('lu', $list[0]->getNickname());
-        $this->assertSame('yz', $list[1]->getNickname());
+        $this->assertSame('lu', $list[0]->getNick());
+        $this->assertSame('yz', $list[1]->getNick());
 
-        /** @var User[] $list */
         $list = $mapper->selectObjs($db, (new DQuery())->where('id', '>', 1), 'nick');
         $this->assertCount(2, $list);
         $this->assertSame(520, $list['lu']->getId());
         $this->assertSame(120, $list['yz']->getId());
-        $this->assertSame('lu', $list['lu']->getNickname());
-        $this->assertSame('yz', $list['yz']->getNickname());
+        $this->assertSame('lu', $list['lu']->getNick());
+        $this->assertSame('yz', $list['yz']->getNick());
     }
 
     public function testInsertAll()
