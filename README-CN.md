@@ -17,8 +17,8 @@ composer require nineton-nasa/norm
 ```dotenv
 [DATABASE]
 HOSTNAME=127.0.0.1
-DATABASE=db
-USERNAME=user
+DATABASE=db-name
+USERNAME=root
 PASSWORD=pass
 HOSTPORT=3306
 ```
@@ -43,4 +43,4 @@ HOSTPORT=3306
 Norm 是一个开源项目，欢迎所有开发者参与其中。如果您发现了任何错误或缺陷，请提交 issue 或 pull request。
 
 # 许可
-Norm 遵循 MIT 许可证。请参阅 LICENSE 文件以获取更多信息。
+Norm 遵循 MIT 许可证。请参阅 [LICENSE](LICENSE) 文件以获取更多信息。

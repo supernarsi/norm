@@ -22,8 +22,8 @@ Create a `.norm-db.env` file in the same directory as the vendor directory, and 
 ```dotenv
 [DATABASE]
 HOSTNAME=127.0.0.1
-DATABASE=db
-USERNAME=user
+DATABASE=db-name
+USERNAME=root
 PASSWORD=pass
 HOSTPORT=3306
 ```
@@ -50,4 +50,5 @@ Norm is an open-source project, and all developers are welcome to participate.
 If you find any errors or defects, please submit an issue or pull request.
 
 # License
-Norm follows the MIT license. Please refer to the LICENSE file for more information.
+
+Norm is licensed under the MIT license. See [LICENSE](LICENSE) for the full license text.
