@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\book;
+namespace tests\mock\Model\book;
 
 use Norm\ORM\Model\SModel;
 

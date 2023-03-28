@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\user;
+namespace tests\mock\Selector\selector;
 
 use Norm\ORM\Model\Model;
 use Norm\ORM\Selector\Selector;
+use tests\mock\Mapper\user\UserMapper;
+use tests\mock\Model\user\User;
 
 class UserSelector extends Selector
 {

@@ -1,16 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace tests\mock\article;
+namespace tests\mock\Mapper\article;
 
 use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
+use tests\mock\Model\article\Article;
 
 class ArticleMapper extends BaseMapper
 {
     protected static string $tableName = 'article';
     protected string $modelName = Article::class;
 
-    public function getTableName(bool $isPartition = false, string $partitionIdx = '', bool $prefixMod = false): string
+    public function getTableName(): string
     {
         return self::$tableName;
     }

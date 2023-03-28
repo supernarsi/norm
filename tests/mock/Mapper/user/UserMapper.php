@@ -1,18 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\user;
+namespace tests\mock\Mapper\user;
 
 use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
+use tests\mock\Model\user\User;
 
 class UserMapper extends BaseMapper
 {
     protected static string $tableName = 'user';
     protected string $modelName = User::class;
 
-    public function getTableName(bool $isPartition = false, string $partitionIdx = '', bool $prefixMod = false): string
+    public function getTableName(): string
     {
-        return $isPartition ? $this->getPartitionTableName($partitionIdx, $prefixMod) : self::$tableName;
+        return self::$tableName;
     }
 
     /**

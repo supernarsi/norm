@@ -12,12 +12,7 @@ abstract class BaseMapper implements Mapper
     protected string $modelName;
     protected static string $tableName;
 
-    abstract public function getTableName(bool $isPartition, string $partitionIdx, bool $prefixMod = false): string;
-
-    public function getPartitionTableName(string $partitionIdx, bool $prefixMod = false): string
-    {
-        return $prefixMod ? $partitionIdx . self::$tableName : self::$tableName . $partitionIdx;
-    }
+    abstract public function getTableName(): string;
 
     protected function newModel(array $modelData, bool $unsetProperty): Model
     {

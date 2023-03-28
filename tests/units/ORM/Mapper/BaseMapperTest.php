@@ -6,8 +6,8 @@ use Norm\DB\DQuery;
 use Norm\DB\IStorage;
 use Norm\ORM\Mapper\BaseMapper;
 use PHPUnit\Framework\TestCase;
-use tests\mock\user\User;
-use tests\mock\user\UserMapper;
+use tests\mock\Mapper\user\UserMapper;
+use tests\mock\Model\user\User;
 
 /**
  * class BaseMapperTest

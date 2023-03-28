@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\mock\article;
+namespace tests\mock\Model\article;
 
 use Norm\ORM\Model\SModel;
 

@@ -1,16 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\book;
+namespace tests\mock\Mapper\book;
 
 use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
+use tests\mock\Model\book\Book;
 
 class BookMapper extends BaseMapper
 {
     protected static string $tableName = 'book';
     protected string $modelName = Book::class;
 
-    public function getTableName(bool $isPartition = false, string $partitionIdx = '', bool $prefixMod = false): string
+    public function getTableName(): string
     {
         return self::$tableName;
     }

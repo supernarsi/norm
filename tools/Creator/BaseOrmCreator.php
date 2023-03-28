@@ -146,14 +146,14 @@ abstract class BaseOrmCreator
      * 解析数据表字段默认值，只返回 0 或 ''
      *
      * @param string $fieldType
-     * @return int|string
+     * @return string
      */
-    protected function dbDefaultVal(string $fieldType)
+    protected function dbDefaultVal(string $fieldType): string
     {
         switch ($fieldType) {
             case 'int':
             case 'float':
-                return 0;
+                return '0';
             case 'bool':
                 return 'false';
             default:

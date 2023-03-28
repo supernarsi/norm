@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\user;
+namespace tests\mock\Model\user;
 
 use Norm\ORM\Model\SModel;
 

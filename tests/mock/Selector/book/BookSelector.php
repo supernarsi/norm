@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace tests\mock\book;
+namespace tests\mock\Selector\book;
 
 use Norm\DB\DQuery;
 use Norm\ORM\Model\Model;
 use Norm\ORM\Selector\Selector;
+use tests\mock\Mapper\book\BookMapper;
+use tests\mock\Model\book\Book;
 
 class BookSelector extends Selector
 {
