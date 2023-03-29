@@ -17,15 +17,17 @@ composer require nineton-nasa/norm
 
 ## 1. Create a Database Configuration File
 
-Create a `.norm-db.ini` file in the same directory as the vendor directory, and modify the corresponding parameters (file content reference `.norm-db.ini.example`).
+Create a `.norm-db.ini` file in the same directory as the vendor directory, and modify the corresponding parameters (file content reference `.norm-db.example.ini`).
 
 ```ini
 [DATABASE]
-HOSTNAME=127.0.0.1
-DATABASE=db-name
-USERNAME=root
-PASSWORD=pass
-HOSTPORT=3306
+TYPE = mysql
+HOSTNAME = 127.0.0.1
+HOSTPORT = 3306
+DATABASE = db-name
+USERNAME = root
+PASSWORD = password
+CHARSET = utf8mb4
 ```
 
 ## 2. Execute Commands
