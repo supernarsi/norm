@@ -133,8 +133,10 @@ abstract class BaseOrmCreator
     protected function parseDbFieldType(string $typeStr): string
     {
         $t = strtolower($typeStr);
-        if (strstr($t, 'int') !== false || $t == 'bit(1)') {
+        if (strstr($t, 'int') !== false) {
             return 'int';
+        } elseif ($t == 'bit(1)' || $t == 'bool') {
+            return 'bool';
         } elseif (strstr($t, 'decimal') !== false || strstr($t, 'double') !== false || strstr($t, 'float') !== false) {
             return 'float';
         } else {
