@@ -10,6 +10,7 @@ abstract class BaseMapper implements Mapper
 {
     /** @var string $modelName must extend the Norm\ORM\Model */
     protected string $modelName;
+    /** @var string base table name */
     protected static string $baseTableName;
 
     abstract public function getTableName(): string;
