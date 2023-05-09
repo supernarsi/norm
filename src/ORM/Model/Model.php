@@ -17,6 +17,7 @@ abstract class Model
     protected array $beSetProperties = [];
     protected ?Mapper $mapper;
 
+    /** need implements */
     abstract public function getId(): int;
 
     public function modelPropertyIsSet(string $field): bool
@@ -54,8 +55,8 @@ abstract class Model
         $this->initORM($data);
 
         if ($unsetProperty) {
+            // 初始时，所有字段设为未 set
             foreach ($this->beSetProperties as &$isSet) {
-                // 初始时，所有字段设为未 set
                 $isSet = false;
             }
         }
