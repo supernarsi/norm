@@ -4,30 +4,28 @@ require_once __DIR__ . '/autoload.php';
 use NormTools\Creator\OrmModelCreator;
 use NormTools\Creator\OrmMapperCreator;
 use NormTools\Creator\OrmSelectorCreator;
-
+printLnMsg('[Welcome to NORM Tool]');
 // 获取 class name
-fwrite(STDOUT, '请输入要创建的模型类名：');
+fwrite(STDOUT, 'Input the class name of the model you want to create: ');
 $className = trim(fgets(STDIN));
 if (!$className) {
-    echo "模型名称不能为空\n";
-    exit();
+    printLnMsg('[error] Class name of model can\'t be empty', true);
 }
 
 // 获取 table name
-fwrite(STDOUT, '请输入关联的数据表名（可接受 database.table 形式）：');
+fwrite(STDOUT, 'Input the table name associated with your model: ');
 $tableName = trim(fgets(STDIN));
 if (!$tableName) {
-    echo "数据表名不能为空\n";
-    exit();
+    printLnMsg('[error] Table name can\'t be empty', true);
 }
 
 // 是否需要创建 Selector
 while (true) {
-    fwrite(STDOUT, '是否需要创建 Selector 类[Y/N]：');
+    fwrite(STDOUT, 'Do you need a Selector Class [Y/N]：');
     $createSelector = trim(fgets(STDIN));
     $createSelector = strtolower(trim($createSelector));
     if (!in_array($createSelector, ['', 'y', 'n'])) {
-        echo "请输入 Y 或 N（不输入则默认为 Y）\n";
+        printLnMsg('[warning] Please input Y or N（default by Y）');
     } else {
         $createSelector = ($createSelector == 'y' || $createSelector == '');
         break;
@@ -35,41 +33,48 @@ while (true) {
 }
 
 // 获取目录路径
-fwrite(STDOUT, '请输入目录（默认 app/orm）：');
+fwrite(STDOUT, 'Input the file path(default path is app/orm): ');
 $dirPath = trim(fgets(STDIN));
 $dirPath = $dirPath ?: 'app/orm';
 
 // 获取子目录路径
-fwrite(STDOUT, '请输入子目录（留空则不生成子目录）：');
+fwrite(STDOUT, 'input the sub path: ');
 $subDir = trim(fgets(STDIN));
 
 try {
     // 创建 model
     $creator = new OrmModelCreator($className, $tableName, $dirPath, $subDir);
     if ($creator->createField()) {
-        echo '[info] 创建 Model 类成功，文件：' . $creator->getResFilePath() . "\n";
+        printLnMsg('[info] Create Model successfully: ' . $creator->getResFilePath());
     } else {
-        echo "[error] 创建 Model 失败\n";
+        printLnMsg('[error] Create Model failed');
     }
 
     // 创建 mapper
     $creator = new OrmMapperCreator($className, $tableName, $dirPath, $subDir);
     if ($creator->createField()) {
-        echo '[info] 创建 Mapper 类成功，文件：' . $creator->getResFilePath() . "\n";
+        printLnMsg('[info] Create Mapper successfully: ' . $creator->getResFilePath());
     } else {
-        echo "[error] 创建 Mapper 失败\n";
+        printLnMsg('[error] Create Mapper failed');
     }
 
     if ($createSelector) {
         // 创建 selector
         $creator = new OrmSelectorCreator($className, $tableName, $dirPath, $subDir);
         if ($creator->createField()) {
-            echo '[info] 创建 Selector 类成功，文件：' . $creator->getResFilePath() . "\n";
+            printLnMsg('[info] Create Selector successfully: ' . $creator->getResFilePath());
         } else {
-            echo "[error] 创建 Selector 失败\n";
+            printLnMsg('[error] Create Selector failed');
         }
     }
 } catch (Exception $e) {
-    echo '[error] 执行失败：' . $e->getMessage() . "\n";
-    exit();
+    printLnMsg('[error] exec failed: ' . $e->getMessage(), true);
+}
+
+function printLnMsg(string $msg, bool $exit = false)
+{
+    echo $msg . PHP_EOL;
+    if ($exit) {
+        exit();
+    }
 }
