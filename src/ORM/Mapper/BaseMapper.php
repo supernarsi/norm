@@ -19,7 +19,7 @@ abstract class BaseMapper implements Mapper
         return new $this->modelName($modelData, $this, $unsetProperty);
     }
 
-    protected function resetDb(?IStorage $db)
+    protected function resetDb(?IStorage $db): void
     {
         $db && $db->init($this->getTableName());
     }

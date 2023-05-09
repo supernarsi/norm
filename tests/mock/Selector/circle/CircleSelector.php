@@ -15,7 +15,7 @@ class CircleSelector extends Selector
     }
 
     /**
-     * @return Circle|Model
+     * @return Circle
      */
     public function createModel(): Circle
     {

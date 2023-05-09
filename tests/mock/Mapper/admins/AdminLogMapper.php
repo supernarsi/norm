@@ -17,7 +17,7 @@ class AdminLogMapper extends BaseMapper
     }
 
     /**
-     * @param Model|AdminLog $model
+     * @param Model $model
      * @param array $data
      * @return AdminLog
      */
@@ -35,7 +35,7 @@ class AdminLogMapper extends BaseMapper
     }
 
     /**
-     * @param Model|AdminLog $model
+     * @param Model $model
      * @return array
      */
     public function prepareSaveData(Model $model): array

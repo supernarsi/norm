@@ -37,7 +37,7 @@ abstract class Model
 
     protected function initORM(array $initData = []): ?self
     {
-        return $this->mapper ? $this->mapper->initModel($this, $initData) : null;
+        return $this->mapper?->initModel($this, $initData);
     }
 
     /**

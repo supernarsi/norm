@@ -121,7 +121,7 @@ class DQuery
      * @param mixed $val
      * @return $this
      */
-    public function where(string $field, string $condition, $val): DQuery
+    public function where(string $field, string $condition, mixed $val): DQuery
     {
         $this->where[] = new DWhere($field, $condition, $val);
         return $this;

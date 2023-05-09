@@ -31,16 +31,6 @@ class DbProperty
     }
 
     /**
-     * @param string $dbFieldName
-     * @return DbProperty
-     */
-    public function setDbFieldName(string $dbFieldName): DbProperty
-    {
-        $this->dbFieldName = $dbFieldName;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getDocument(): string
@@ -49,30 +39,10 @@ class DbProperty
     }
 
     /**
-     * @param string $document
-     * @return DbProperty
-     */
-    public function setDocument(string $document): DbProperty
-    {
-        $this->document = $document;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getModelFieldName(): string
     {
         return $this->modelFieldName;
-    }
-
-    /**
-     * @param string $modelFieldName
-     * @return DbProperty
-     */
-    public function setModelFieldName(string $modelFieldName): DbProperty
-    {
-        $this->modelFieldName = $modelFieldName;
-        return $this;
     }
 }

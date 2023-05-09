@@ -23,7 +23,7 @@ class DWhere
      * @param string $condition
      * @param mixed $val
      */
-    public function __construct(string $field, string $condition, $val)
+    public function __construct(string $field, string $condition, mixed $val)
     {
         $this->setField($field)->setCondition($condition)->setVal($val);
     }

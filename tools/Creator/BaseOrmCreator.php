@@ -119,7 +119,7 @@ abstract class BaseOrmCreator
      *
      * @param $fp
      */
-    protected function writeFinish($fp)
+    protected function writeFinish($fp): void
     {
         fwrite($fp, "}\n");
     }
@@ -133,11 +133,11 @@ abstract class BaseOrmCreator
     protected function parseDbFieldType(string $typeStr): string
     {
         $t = strtolower($typeStr);
-        if (strstr($t, 'int') !== false) {
+        if (str_contains($t, 'int')) {
             return 'int';
         } elseif ($t == 'bit(1)' || $t == 'bool') {
             return 'bool';
-        } elseif (strstr($t, 'decimal') !== false || strstr($t, 'double') !== false || strstr($t, 'float') !== false) {
+        } elseif (str_contains($t, 'decimal') || str_contains($t, 'double') || str_contains($t, 'float')) {
             return 'float';
         } else {
             return 'string';
@@ -152,15 +152,11 @@ abstract class BaseOrmCreator
      */
     protected function dbDefaultVal(string $fieldType): string
     {
-        switch ($fieldType) {
-            case 'int':
-            case 'float':
-                return '0';
-            case 'bool':
-                return 'false';
-            default:
-                return "''";
-        }
+        return match ($fieldType) {
+            'int', 'float' => '0',
+            'bool' => 'false',
+            default => "''",
+        };
     }
 
     /**
@@ -238,19 +234,7 @@ abstract class BaseOrmCreator
         return $this->properties;
     }
 
-    protected function moveCursor($fp, $endLine)
-    {
-        $line = 0;
-        while (!feof($fp)) {
-            ++$line;
-            if ($line == $endLine) {
-                break;
-            }
-            fgets($fp);
-        }
-    }
-
-    protected function getFile(string $fileName, string $type)
+    protected function getFile(string $fileName, string $type): bool|string
     {
         return file_get_contents(__DIR__ . '/../schema/' . $type . '/' . $fileName);
     }

@@ -6,7 +6,7 @@ class OrmSelectorCreator extends BaseOrmCreator
 {
     protected string $classType = 'Selector';
 
-    protected function getModelFile(string $file)
+    protected function getModelFile(string $file): bool|string
     {
         return $this->getFile($file, 'selector');
     }

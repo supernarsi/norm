@@ -6,7 +6,7 @@ class OrmModelCreator extends BaseOrmCreator
 {
     protected string $classType = 'Model';
 
-    protected function getModelFile(string $file)
+    protected function getModelFile(string $file): bool|string
     {
         return $this->getFile($file, 'model');
     }
@@ -114,7 +114,7 @@ class OrmModelCreator extends BaseOrmCreator
      * @param string $propertyName
      * @param string $type
      */
-    protected function writeSetAndGetFunc($fp, string $propertyName, string $type)
+    protected function writeSetAndGetFunc($fp, string $propertyName, string $type): void
     {
         fwrite($fp, $this->buildGetFunction($propertyName, $type) . "\n");
         fwrite($fp, $this->buildSetFunction($propertyName, $type, $this->modelClassName) . "\n");
@@ -125,7 +125,7 @@ class OrmModelCreator extends BaseOrmCreator
      *
      * @param $fp
      */
-    protected function writeSetGetProperties($fp)
+    protected function writeSetGetProperties($fp): void
     {
         fwrite($fp, PHP_EOL);
         foreach ($this->properties as $property) {

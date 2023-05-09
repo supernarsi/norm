@@ -61,7 +61,7 @@ class OrmMapperCreator extends BaseOrmCreator
         return "        \$model->modelPropertyIsSet('$field') && \$dbFields['$dbField'] = \$model->$funcName();\n";
     }
 
-    protected function buildInitModelFunc()
+    protected function buildInitModelFunc(): array|string
     {
         $tmpStr = '';
         foreach ($this->properties as $property) {
@@ -72,7 +72,7 @@ class OrmMapperCreator extends BaseOrmCreator
         return str_replace('{{initContent}}', $tmpStr, $content);
     }
 
-    protected function buildPrepareSaveFunc()
+    protected function buildPrepareSaveFunc(): array|string
     {
         $tmpStr = '';
         foreach ($this->properties as $property) {

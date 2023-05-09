@@ -4,6 +4,7 @@ require_once __DIR__ . '/autoload.php';
 use NormTools\Creator\OrmModelCreator;
 use NormTools\Creator\OrmMapperCreator;
 use NormTools\Creator\OrmSelectorCreator;
+
 printLnMsg('[Welcome to NORM Tool]');
 // 获取 class name
 fwrite(STDOUT, 'Input the class name of the model you want to create: ');
@@ -71,7 +72,7 @@ try {
     printLnMsg('[error] exec failed: ' . $e->getMessage(), true);
 }
 
-function printLnMsg(string $msg, bool $exit = false)
+function printLnMsg(string $msg, bool $exit = false): void
 {
     echo $msg . PHP_EOL;
     if ($exit) {
