@@ -3,7 +3,7 @@
 namespace tests\mock\Selector\book;
 
 use Norm\DB\DQuery;
-use Norm\ORM\Model\Model;
+use Norm\DB\DSort;
 use Norm\ORM\Selector\Selector;
 use tests\mock\Mapper\book\BookMapper;
 use tests\mock\Model\book\Book;
@@ -15,21 +15,18 @@ class BookSelector extends Selector
         return new BookMapper();
     }
 
-    /**
-     * @return Book|Model
-     */
     public function createModel(): Book
     {
-        return parent::createModel();
+        /** @var Book $book */
+        $book = parent::createModel();
+        return $book;
     }
 
-    /**
-     * @param int $id
-     * @return ?Book
-     */
-    public function getBook(int $id): Model
+    public function getBook(int $id): ?Book
     {
-        return $this->mapper->findObj($this->db, $id);
+        /** @var ?Book $book */
+        $book = $this->mapper->findObj($this->db, $id);
+        return $book;
     }
 
     /**
@@ -37,7 +34,7 @@ class BookSelector extends Selector
      */
     public function getBookList(): array
     {
-        $query = (new DQuery())->where('status', '=', 1)->order('id', DQuery::DESC);
+        $query = (new DQuery())->where('status', '=', 1)->order('id', DSort::Desc);
         return $this->mapper->selectObjs($this->db, $query);
     }
 }

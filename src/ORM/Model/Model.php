@@ -6,18 +6,12 @@ use Norm\DB\DQuery;
 use Norm\DB\IStorage;
 use Norm\ORM\Mapper\Mapper;
 
-/**
- * Class Model
- *
- * @package Norm\ORM
- */
 abstract class Model
 {
     /** @var array 对象中被 set 过的属性 */
     protected array $beSetProperties = [];
-    protected ?Mapper $mapper;
+    readonly protected ?Mapper $mapper;
 
-    /** need implements */
     abstract public function getId(): int;
 
     public function modelPropertyIsSet(string $field): bool
@@ -44,7 +38,7 @@ abstract class Model
      * Model constructor.
      *
      * @param array $data
-     * @param Mapper|null $mapper
+     * @param ?Mapper $mapper
      * @param bool $unsetProperty 是否需要将所有字段标为未 set
      */
     public function __construct(array $data = [], ?Mapper $mapper = null, bool $unsetProperty = true)
@@ -67,7 +61,7 @@ abstract class Model
      * @param mixed $val
      * @return $this
      */
-    public function setProperty(string $field, $val): self
+    public function setProperty(string $field, mixed $val): self
     {
         isset($this->beSetProperties[$field]) && ($this->beSetProperties[$field] = true);
         $this->$field = $val;
@@ -100,8 +94,7 @@ abstract class Model
         if (!$this->mapper) {
             return null;
         }
-        $res = $this->mapper->update($db, $this->getModelFields());
-        return $res ? $this : null;
+        return $this->mapper->update($db, $this->getModelFields()) ? $this : null;
     }
 
     public function save(IStorage $db): ?self

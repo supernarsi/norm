@@ -3,32 +3,32 @@
 namespace tests\units\ORM\Selector;
 
 use Norm\DB\DQuery;
+use Norm\DB\DWhere;
 use Norm\DB\IStorage;
+use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Mapper\Mapper;
+use Norm\ORM\Model\Model;
 use Norm\ORM\Selector\Selector;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
-use tests\mock\Selector\selector\UserSelector;
+use tests\mock\Selector\user\UserSelector;
 
-/**
- * class UserSelectorTest
- *
- * @package tests\units\ORM\Selector
- * @covers \Norm\DB\DQuery
- * @covers \Norm\DB\DWhere
- * @covers \Norm\ORM\Model\Model
- * @covers \Norm\ORM\Mapper\BaseMapper
- * @covers \Norm\ORM\Selector\Selector
- * @covers \tests\mock\Model\user\User
- * @covers \tests\mock\Mapper\user\UserMapper
- * @covers \tests\mock\Selector\selector\UserSelector
- */
+#[CoversClass(DQuery::class)]
+#[CoversClass(DWhere::class)]
+#[CoversClass(Model::class)]
+#[CoversClass(BaseMapper::class)]
+#[CoversClass(Selector::class)]
 class UserSelectorTest extends TestCase
 {
     private IStorage $db;
     private Selector $selector;
 
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -62,6 +62,9 @@ class UserSelectorTest extends TestCase
         $this->assertInstanceOf(User::class, $this->selector->createModel());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectorInsertAll()
     {
         $mockMapper = $this->createStub(UserMapper::class);
@@ -70,6 +73,9 @@ class UserSelectorTest extends TestCase
         $this->assertSame(2, $tester->insertAll([['nickname' => 'new-user-2'], ['nick' => 'new-user-3']]));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectorTrans()
     {
         $mockMapper = $this->createStub(UserMapper::class);
@@ -83,6 +89,9 @@ class UserSelectorTest extends TestCase
         $this->assertTrue($tester->rollback());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectorMapperSelectObjs()
     {
         $mapper = $this->createStub(Mapper::class);
@@ -90,6 +99,9 @@ class UserSelectorTest extends TestCase
         $this->assertSame([], $this->selector->mapperSelectObjs($mapper, new DQuery()));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectorMapperFindObjWhere()
     {
         $mapper = $this->createStub(Mapper::class);
@@ -100,6 +112,9 @@ class UserSelectorTest extends TestCase
         $this->assertSame('Mostly Harmless', $model->getNick());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectorMapperFindObj()
     {
         $mapper = $this->createStub(Mapper::class);

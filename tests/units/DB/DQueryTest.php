@@ -3,23 +3,22 @@
 namespace tests\units\DB;
 
 use Norm\DB\DQuery;
+use Norm\DB\DSort;
+use Norm\DB\DWhere;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * class DQueryTest
- *
- * @package tests\units\DB
- * @covers \Norm\DB\DQuery
- * @covers \Norm\DB\DWhere
- */
+#[CoversClass(DQuery::class)]
+#[CoversClass(DWhere::class)]
 class DQueryTest extends TestCase
 {
     public function testDQuery()
     {
-        $query = (new DQuery())->where('test', '>=', 12)
+        $query = (new DQuery())
+            ->where('test', '>=', 12)
             ->where('test2', '=', 'dd')
-            ->order('sort', DQuery::DESC)
             ->order('weight')
+            ->order('sort', DSort::Desc)
             ->orderField('k1', ['v1', 'v2'])
             ->page(1, 2);
 

@@ -2,28 +2,33 @@
 
 namespace tests\units\ORM\Model;
 
+use Norm\DB\DQuery;
+use Norm\DB\DWhere;
 use Norm\DB\IStorage;
+use Norm\ORM\Mapper\BaseMapper;
 use Norm\ORM\Model\Model;
+use Norm\ORM\Model\SModel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
 
-/**
- * class UserTest
- *
- * @package tests\units\ORM\Selector
- * @covers \Norm\ORM\Model\Model
- * @covers \Norm\ORM\Model\SModel
- * @covers \Norm\ORM\Mapper\BaseMapper
- * @covers \tests\mock\Model\user\User
- * @covers \tests\mock\Mapper\user\UserMapper
- * @uses   \Norm\DB\DQuery
- * @uses   \Norm\DB\DWhere
- */
+#[CoversClass(BaseMapper::class)]
+#[CoversClass(DQuery::class)]
+#[CoversClass(DWhere::class)]
+#[CoversClass(Model::class)]
+#[CoversClass(SModel::class)]
+#[UsesClass(User::class)]
+#[UsesClass(UserMapper::class)]
 class UserTest extends TestCase
 {
     private IStorage $db;
 
+    /**
+     * @throws Exception
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -45,7 +50,10 @@ class UserTest extends TestCase
         $userData = ['id' => 42, 'nick' => 'init-name'];
         $tester = new User($userData, new UserMapper(), false);
         $result = $tester->getModelProperties();
-        $this->assertSame(['id' => true, 'nick' => true, 'beSetProperties' => []], $result);
+        $this->assertTrue($result['id']);
+        $this->assertTrue($result['nick']);
+        $this->assertSame([], $result['beSetProperties']);
+        $this->assertCount(3, $result);
     }
 
     public function testGetModelFields()
@@ -68,6 +76,9 @@ class UserTest extends TestCase
         $this->assertSame(['id' => 42, 'nick' => 'init-name-42'], $tester->getModelFields());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testInsert()
     {
         // case1: no mapper
@@ -91,6 +102,9 @@ class UserTest extends TestCase
         //$this->assertSame('new-user', $newUser->getNick());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testUpdate()
     {
         // case1: no mapper
@@ -137,6 +151,9 @@ class UserTest extends TestCase
         $this->assertNull($tester->save($this->db));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testDelete()
     {
         $tester = (new User());
@@ -155,8 +172,8 @@ class UserTest extends TestCase
 
     public function testRender()
     {
-        $tester = $this->getMockForAbstractClass(Model::class);
-        $this->assertSame([], $tester->render());
+        $tester =(new User());
+        $this->assertSame(['id' => 0, 'nick' => ''], $tester->render());
     }
 
     public function testSerialize()

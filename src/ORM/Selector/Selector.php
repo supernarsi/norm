@@ -9,20 +9,9 @@ use Norm\ORM\Model\Model;
 
 abstract class Selector
 {
-    /** @var IStorage */
-    protected IStorage $db;
-
-    /** @var Mapper */
-    protected Mapper $mapper;
-
-    /** @return Mapper */
     abstract protected function setModelMapper(): Mapper;
 
-    /**
-     * @param IStorage $db
-     * @param Mapper|null $mapper
-     */
-    public function __construct(IStorage $db, ?Mapper $mapper = null)
+    public function __construct(protected IStorage $db, protected ?Mapper $mapper = null)
     {
         $this->db = clone $db;
         $this->mapper = $mapper ?: $this->setModelMapper();
@@ -33,22 +22,16 @@ abstract class Selector
         return $this->db;
     }
 
-    /** @return Model */
     public function createModel(): Model
     {
         return $this->mapper->createModel();
     }
 
-    /** @return Mapper */
     public function getMapper(): Mapper
     {
         return $this->mapper;
     }
 
-    /**
-     * @param array $data
-     * @return int
-     */
     public function insertAll(array $data): int
     {
         return $this->mapper->insertAll($this->db, $data);

@@ -1,7 +1,7 @@
 .idea
 vendor/
-composer.lock
-.phpunit.cache
-phpunit.xml
 .norm-db.ini
+.phpunit.cache
 .phpunit.result.cache
+phpunit.result
+composer.lock

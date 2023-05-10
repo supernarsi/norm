@@ -3,14 +3,10 @@
 namespace tests\units\DB;
 
 use Norm\DB\DWhere;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * class DWhereTest
- *
- * @package tests\units\DB
- * @covers \Norm\DB\DWhere
- */
+#[CoversClass(DWhere::class)]
 class DWhereTest extends TestCase
 {
     public function testDWhere()

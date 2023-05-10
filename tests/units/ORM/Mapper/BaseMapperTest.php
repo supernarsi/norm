@@ -3,31 +3,35 @@
 namespace tests\units\ORM\Mapper;
 
 use Norm\DB\DQuery;
+use Norm\DB\DWhere;
 use Norm\DB\IStorage;
 use Norm\ORM\Mapper\BaseMapper;
+use Norm\ORM\Model\Model;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
 
-/**
- * class BaseMapperTest
- *
- * @package tests\units\ORM\Mapper
- * @covers \Norm\ORM\Mapper\BaseMapper
- * @uses   DQuery
- * @uses   \Norm\DB\DWhere
- * @uses   \Norm\ORM\Model\Model
- */
+#[CoversClass(BaseMapper::class)]
+#[CoversClass(DQuery::class)]
+#[CoversClass(DWhere::class)]
+#[CoversClass(Model::class)]
+#[UsesClass(UserMapper::class)]
 class BaseMapperTest extends TestCase
 {
-    private $mapper;
+    private BaseMapper $mapper;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->mapper = $this->getMockForAbstractClass(BaseMapper::class);
+        $this->mapper = new UserMapper();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testUpdate()
     {
         $db = $this->createStub(IStorage::class);
@@ -35,6 +39,9 @@ class BaseMapperTest extends TestCase
         $this->assertTrue($this->mapper->update($db, ['test' => 1]));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testInsert()
     {
         $db = $this->createStub(IStorage::class);
@@ -46,6 +53,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame(12, $this->mapper->insert($db, ['test' => 1]));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testDelete()
     {
         $db = $this->createStub(IStorage::class);
@@ -54,6 +64,9 @@ class BaseMapperTest extends TestCase
         $this->assertTrue($this->mapper->delete($db, (new DQuery())->where('id', '=', 13)));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCount()
     {
         $db = $this->createStub(IStorage::class);
@@ -62,6 +75,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame(20, $this->mapper->count($db, (new DQuery())->where('id', '=', 13)));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSum()
     {
         $db = $this->createStub(IStorage::class);
@@ -70,6 +86,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame(41.23, $this->mapper->sum($db, (new DQuery())->where('id', '=', 13), 'num'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelect()
     {
         $db = $this->createStub(IStorage::class);
@@ -78,6 +97,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame([1, 2, 3], $this->mapper->select($db, (new DQuery())->where('id', '=', 13)));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testFindObjWhere()
     {
         $db = $this->createStub(IStorage::class);
@@ -95,6 +117,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame('', $model->getNick());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSelectObjs()
     {
         $db = $this->createStub(IStorage::class);
@@ -107,6 +132,7 @@ class BaseMapperTest extends TestCase
         $db->method('setCondition')->willReturn($db);
         $db->method('selectData')->willReturn([['id' => 520, 'nick' => 'lu'], ['id' => 120, 'nick' => 'yz']]);
         $mapper = new UserMapper();
+        /** @var User[] $list */
         $list = $mapper->selectObjs($db, (new DQuery())->where('id', '>', 1));
         $this->assertCount(2, $list);
         $this->assertSame(520, $list[0]->getId());
@@ -122,6 +148,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame('yz', $list['yz']->getNick());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testInsertAll()
     {
         $db = $this->createStub(IStorage::class);
@@ -139,6 +168,9 @@ class BaseMapperTest extends TestCase
         $this->assertSame(1, $this->mapper->insertAll($db, $list));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testStartTrans()
     {
         $db = $this->createStub(IStorage::class);
@@ -146,6 +178,9 @@ class BaseMapperTest extends TestCase
         $this->assertTrue($this->mapper->startTrans($db));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCommit()
     {
         $db = $this->createStub(IStorage::class);
@@ -153,6 +188,9 @@ class BaseMapperTest extends TestCase
         $this->assertTrue($this->mapper->commit($db));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRollback()
     {
         $db = $this->createStub(IStorage::class);
