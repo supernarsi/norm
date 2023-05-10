@@ -8,8 +8,7 @@ use Norm\DB\DWhere;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(DQuery::class)]
-#[CoversClass(DWhere::class)]
+#[CoversClass(DQuery::class), CoversClass(DWhere::class)]
 class DQueryTest extends TestCase
 {
     public function testDQuery()

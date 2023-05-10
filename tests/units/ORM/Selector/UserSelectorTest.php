@@ -16,11 +16,13 @@ use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
 use tests\mock\Selector\user\UserSelector;
 
-#[CoversClass(DQuery::class)]
-#[CoversClass(DWhere::class)]
-#[CoversClass(Model::class)]
-#[CoversClass(BaseMapper::class)]
-#[CoversClass(Selector::class)]
+#[
+    CoversClass(DQuery::class),
+    CoversClass(DWhere::class),
+    CoversClass(Model::class),
+    CoversClass(BaseMapper::class),
+    CoversClass(Selector::class),
+]
 class UserSelectorTest extends TestCase
 {
     private IStorage $db;

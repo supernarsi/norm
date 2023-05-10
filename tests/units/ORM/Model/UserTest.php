@@ -15,13 +15,15 @@ use PHPUnit\Framework\TestCase;
 use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
 
-#[CoversClass(BaseMapper::class)]
-#[CoversClass(DQuery::class)]
-#[CoversClass(DWhere::class)]
-#[CoversClass(Model::class)]
-#[CoversClass(SModel::class)]
-#[UsesClass(User::class)]
-#[UsesClass(UserMapper::class)]
+#[
+    CoversClass(BaseMapper::class),
+    CoversClass(DQuery::class),
+    CoversClass(DWhere::class),
+    CoversClass(Model::class),
+    CoversClass(SModel::class),
+    UsesClass(User::class),
+    UsesClass(UserMapper::class),
+]
 class UserTest extends TestCase
 {
     private IStorage $db;
@@ -172,7 +174,7 @@ class UserTest extends TestCase
 
     public function testRender()
     {
-        $tester =(new User());
+        $tester = (new User());
         $this->assertSame(['id' => 0, 'nick' => ''], $tester->render());
     }
 

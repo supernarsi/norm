@@ -14,11 +14,13 @@ use PHPUnit\Framework\TestCase;
 use tests\mock\Mapper\user\UserMapper;
 use tests\mock\Model\user\User;
 
-#[CoversClass(BaseMapper::class)]
-#[CoversClass(DQuery::class)]
-#[CoversClass(DWhere::class)]
-#[CoversClass(Model::class)]
-#[UsesClass(UserMapper::class)]
+#[
+    CoversClass(BaseMapper::class),
+    CoversClass(DQuery::class),
+    CoversClass(DWhere::class),
+    CoversClass(Model::class),
+    UsesClass(UserMapper::class),
+]
 class BaseMapperTest extends TestCase
 {
     private BaseMapper $mapper;
